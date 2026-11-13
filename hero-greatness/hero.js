@@ -100,7 +100,8 @@ function layout(){
   L={mobile,fs,capH,x0,cy,base,tw,cw,ch,crownX:x0+gw*0.5,crownBase:cy-capH/2+capH*0.02,crownRot:-0.16,s:Math.max(3,fs/21)};
   // remera: arriba se mete bajo la palabra, abajo deja lugar a la sombra
   // celular: la remera termina 150 px antes del final para que abajo entren el botón y "TCRN GREATNESS"
-  const sTop=mobile?cy+capH*0.3:cy-capH*0.22;let sh=(mobile?H-150:H*0.875)-sTop,sw=sh*IM.shirt.width/IM.shirt.height;
+  // (13/11/26, Domi: en celular el ángel cruza entre la remera y el botón → la remera termina en H-205 para dejarle la franja)
+  const sTop=mobile?cy+capH*0.3:cy-capH*0.22;let sh=(mobile?H-205:H*0.875)-sTop,sw=sh*IM.shirt.width/IM.shirt.height;
   const maxW=mobile?W*1.02:W*0.54;if(sw>maxW){sw=maxW;sh=sw*IM.shirt.height/IM.shirt.width}
   // remera 20% más grande, creciendo desde su centro
   const GROW=mobile?1.0:1.2;const sTop2=sTop-sh*(GROW-1)/2;sw*=GROW;sh*=GROW;
@@ -281,8 +282,10 @@ function drawBehind(t){
   // cupido de la estampa cruza volando de derecha a izquierda, aleteando
   if(IM.body&&IM.wn&&IM.wf){
     const CUP=CUP_DUR,SHOT=CUP_SHOT;  // cruza lento; dispara cuando ya casi sale por la izquierda
-    const w=L.fs*(L.mobile?1.5:0.95),h=w*IM.body.height/IM.body.width;
-    const pos=cc=>{const q=clamp(cc/CUP,0,1),k=q*0.55+easeInOut(q)*0.45;return{x:W+w*0.25-(W+w*1.25)*k,y:L.cy-L.capH*0.6+Math.sin(cc*1.7)*L.capH*0.15}};
+    const w=L.fs*(L.mobile?1.05:0.95),h=w*IM.body.height/IM.body.width;
+    // celular: vuela por la franja entre el pie de la remera y el botón (arriba del botón hay ~112 px de UI)
+    const yC=L.mobile?(L.sy+L.sh+(H-112))/2:L.cy-L.capH*0.6, amp=L.mobile?6:L.capH*0.15;
+    const pos=cc=>{const q=clamp(cc/CUP,0,1),k=q*0.55+easeInOut(q)*0.45;return{x:W+w*0.25-(W+w*1.25)*k,y:yC+Math.sin(cc*1.7)*amp}};
     if(c<CUP){
       const p=pos(c),pv=pos(Math.max(0,c-0.03));const vx=(p.x-pv.x)/0.03,vy=(p.y-pv.y)/0.03;
       const speed=Math.min(1,Math.abs(vx)/(W*0.45));
