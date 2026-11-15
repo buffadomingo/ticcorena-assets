@@ -26,7 +26,7 @@
       + '#tcrn-mov .tm-track{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}'
       + '#tcrn-mov .tm-track::-webkit-scrollbar{display:none}'
       + '#tcrn-mov .tm-track.arrastra{cursor:grabbing;scroll-snap-type:none}'
-      + '#tcrn-mov .tm-card{flex:0 0 auto;width:clamp(300px,26vw,460px);aspect-ratio:9/16;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
+      + '#tcrn-mov .tm-card{flex:0 0 auto;width:clamp(280px,min(26vw,calc(75vh * 9 / 16)),460px);aspect-ratio:9/16;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
       + '#tcrn-mov .tm-reel{display:block;width:100%;height:100%}'
       + '#tcrn-mov .tm-card video{width:100%;height:100%;object-fit:cover;display:block}'
       + '#tcrn-mov .tm-bolsa{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:6px;background:rgba(40,40,40,.72);display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s,transform .2s}'
