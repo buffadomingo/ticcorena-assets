@@ -8,7 +8,7 @@
   // x, y = % sobre la imagen · lado = dónde va el texto en PC
   var PUNTOS = [
     { x: 36, y: 27, lado: 'izq', t: '+590 strass', d: 'Aplicados con calor, uno al lado del otro.' },
-    { x: 92, y: 36, lado: 'der', t: 'Algodón 20/1', d: 'Tela de alto gramaje.' },
+    { x: 90, y: 25, lado: 'der', t: 'Algodón 20/1', d: 'Tela de alto gramaje.' },
     { x: 57, y: 44, lado: 'der', t: 'Diseño único', d: 'Único en el mundo. Sí, en el mundo.' },
     { x: 27, y: 56, lado: 'izq', t: 'Estampa 44 × 50 cm', d: 'No se quiebra ni se despinta.' }
   ];
