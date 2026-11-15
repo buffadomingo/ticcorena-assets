@@ -5,7 +5,7 @@
    Datos de TABLA-GREATNESS.png. Se inserta después de "Productos destacados". Solo portada. */
 (function () {
   if (location.pathname !== '/' || window.__tcrnDet) return;
-  var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@3ba55ec7281d195cffca95251666dd25c0306073/greatness-detalle/';
+  var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@656a9bbe0a7e53cb4c699ef8ab80670ddf74c62a/greatness-detalle/';
   var URL = 'https://ticcorena.com/productos/remera-tcrn-greatness/';
   var STATS = [['BRILLO', '590', 1, '+590 cristales aplicados con calor'], ['TELA', '20/1', .92, 'Algodón de alto gramaje'],
                ['ESTAMPA', '44×50', .95, 'Serigrafía que no se quiebra ni se despinta'], ['RAREZA', 'ÚNICA', 1, 'Diseño único en el mundo']];
@@ -73,15 +73,18 @@
       + 'background-image:radial-gradient(1.4px 1.4px at 20% 30%,#fff,transparent),radial-gradient(1.2px 1.2px at 70% 22%,#fff,transparent),radial-gradient(1.6px 1.6px at 40% 62%,#fff,transparent),radial-gradient(1.2px 1.2px at 82% 74%,#fff,transparent),radial-gradient(1.4px 1.4px at 12% 86%,#fff,transparent),radial-gradient(1px 1px at 55% 45%,#fff,transparent);'
       + 'background-size:120px 160px;background-position:var(--mx) var(--my)}'
       /* dorso */
-      + '#tcrn-det .tc-dorso{background:#0b0b0b;padding:11px}'
-      + '#tcrn-det .tc-dorso .tc-int{background:repeating-linear-gradient(45deg,#0e0e0e 0 10px,#111 10px 20px);padding:16px 16px 12px;border:1px solid #2a2a2a}'
-      + '#tcrn-det .tc-d-kick{font:600 7.5px/1 Unbounded,sans-serif;letter-spacing:.24em;color:#8C8C8C;margin:0}'
-      + '#tcrn-det .tc-d-tit{font:italic 500 30px/1 "Cormorant Garamond",Georgia,serif;margin:6px 0 8px}'
-      + '#tcrn-det .tc-d-lista{list-style:none;margin:0;padding:0;border-top:1px solid #2a2a2a}'
-      + '#tcrn-det .tc-d-lista li{padding:6px 0;border-bottom:1px solid #222;font:400 11.5px/1.3 "Archivo",Arial,sans-serif;color:#d4d4d4}'
-      + '#tcrn-det .tc-d-lista li b{display:block;font:600 7px/1.4 Unbounded,sans-serif;letter-spacing:.18em;color:#8C8C8C;margin-bottom:2px}'
-      + '#tcrn-det .tc-d-precio{margin:auto 0 0;padding-top:12px}'
+      + '#tcrn-det .tc-dorso{padding:11px;background:linear-gradient(135deg,#f4f4f4,#9c9c9c 22%,#ffffff 38%,#7d7d7d 55%,#e9e9e9 72%,#8a8a8a 90%,#f2f2f2)}'
+      + '#tcrn-det .tc-dorso .tc-int{padding:12px 12px 10px}'
+      + '#tcrn-det .tc-d-sub{display:flex;justify-content:space-between;gap:8px;margin-top:10px}'
+      + '#tcrn-det .tc-d-grid{margin:10px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:6px}'
+      + '#tcrn-det .tc-d-cel{border:1px solid #2a2a2a;border-radius:6px;padding:9px 9px 8px;background:linear-gradient(160deg,#161616,#0d0d0d)}'
+      + '#tcrn-det .tc-d-cel em{display:block;font:600 19px/1 Unbounded,sans-serif;font-style:normal;color:#fff}'
+      + '#tcrn-det .tc-d-cel b{display:block;margin-top:6px;font:600 6.5px/1 Unbounded,sans-serif;letter-spacing:.18em;color:#8C8C8C}'
+      + '#tcrn-det .tc-d-cel span{display:block;margin-top:5px;font:400 10px/1.3 "Archivo",Arial,sans-serif;color:#cfcfcf}'
+      + '#tcrn-det .tc-d-precio{margin:auto 0 0;padding-top:10px}'
+      + '#tcrn-det .tc-d-precio p{margin:0;display:flex;align-items:baseline;gap:10px}'
       + '#tcrn-det .tc-d-precio b{font:600 24px/1 Unbounded,sans-serif}'
+      + '#tcrn-det .tc-d-precio s{font:600 11px/1 Unbounded,sans-serif;color:#7d7d7d}'
       + '#tcrn-det .tc-d-precio span{display:block;margin-top:6px;font:400 11px/1.4 "Archivo",Arial,sans-serif;color:#9a9a9a}'
       + '#tcrn-det .tc-d-btn{display:block;margin-top:12px;padding:13px;background:#fff;color:#0A0A0A;text-align:center;text-decoration:none;font:600 8.5px/1 Unbounded,sans-serif;letter-spacing:.22em}'
       + '#tcrn-det .tc-d-volver{margin-top:9px;text-align:center;font:600 7px/1 Unbounded,sans-serif;letter-spacing:.2em;color:#777}'
@@ -95,7 +98,7 @@
     var stats = STATS.map(function (x) {
       return '<div class="tc-st"><b>' + x[0] + '</b><span class="tc-barra"><i data-w="' + (x[2] * 100) + '%"></i></span><em>' + x[1] + '</em></div>';
     }).join('');
-    var dorso = STATS.map(function (x) { return '<li><b>' + x[0] + ' · ' + x[1] + '</b>' + x[3] + '</li>'; }).join('');
+    var dorso = STATS.map(function (x) { return '<div class="tc-d-cel"><em>' + x[1] + '</em><b>' + x[0] + '</b><span>' + x[3] + '</span></div>'; }).join('');
     var s = document.createElement('section'); s.id = 'tcrn-det';
     s.innerHTML = '<div class="tc-in"><div class="tc-texto">'
       + '<p class="tc-kick"><i>★</i> CARTA LEGENDARIA · N.º 03</p>'
@@ -113,10 +116,13 @@
       + '<p class="tc-frase">“Para los que quieren brillar de verdad.”</p>'
       + '<div class="tc-pie"><span>TICCORENA · CÓRDOBA</span><span>2026</span></div></div>'
       + '<span class="tc-holo"></span><span class="tc-chispas"></span><span class="tc-glare"></span></div>'
-      + '<div class="tc-cara tc-dorso"><div class="tc-int"><p class="tc-d-kick">FICHA · N.º 03</p><p class="tc-d-tit">Greatness</p>'
-      + '<ul class="tc-d-lista"><li><b>COLOR</b>Negra</li>' + dorso + '</ul>'
-      + '<div class="tc-d-precio"><b>$36.990</b><span>con transferencia · Precio de lista $41.100 · 3 cuotas sin interés</span></div>'
-      + '<a class="tc-d-btn" href="' + URL + '">COMPRAR LA GREATNESS</a><p class="tc-d-volver">TOCÁ PARA VOLVER</p></div></div>'
+      + '<div class="tc-cara tc-dorso"><div class="tc-int">'
+      + '<div class="tc-top"><span class="tc-nom">TICCORENA</span><span class="tc-leg">FICHA · N.º 03</span></div>'
+      + '<p class="tc-tipo tc-d-sub"><span>TCRN GREATNESS</span><span>COLOR · NEGRA</span></p>'
+      + '<div class="tc-d-grid">' + dorso + '</div>'
+      + '<div class="tc-d-precio"><p><b>$36.990</b><s>$41.100</s></p><span>con transferencia · 3 cuotas sin interés</span></div>'
+      + '<a class="tc-d-btn" href="' + URL + '">COMPRAR LA GREATNESS</a><p class="tc-d-volver">TOCÁ PARA VOLVER</p></div>'
+      + '<span class="tc-holo"></span><span class="tc-chispas"></span><span class="tc-glare"></span></div>'
       + '</div></div></div></div>';
 
     var seccion = ancla ? (ancla.closest('section') || ancla) : null;
