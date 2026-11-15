@@ -21,6 +21,7 @@
     var css = ''
       + "@font-face{font-family:'Unbounded';font-style:normal;font-weight:600;font-display:swap;src:url(https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG68b244rNgQ.woff2) format('woff2')}"
       + "@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(https://fonts.gstatic.com/s/cormorantgaramond/v21/co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDD-iNM8.woff2) format('woff2')}"
+      + '#tcrn-det,#tcrn-det *{box-sizing:border-box}'
       + '#tcrn-det{background:radial-gradient(ellipse 60% 70% at 70% 50%,#ffffff,#F1F0EC 70%);color:#0A0A0A;padding:96px 0 104px;overflow:hidden}'
       + '#tcrn-det .tc-in{max-width:1160px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}'
       + '#tcrn-det .tc-kick{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.32em;color:#8C8C8C;margin:0 0 18px;display:flex;align-items:center;gap:10px}'
