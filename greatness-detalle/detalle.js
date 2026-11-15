@@ -5,7 +5,7 @@
    Datos de TABLA-GREATNESS.png. Se inserta después de "Productos destacados". Solo portada. */
 (function () {
   if (location.pathname !== '/' || window.__tcrnDet) return;
-  var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@267df9252970fd42d30e36841b7bd3faff045cd8/greatness-detalle/';
+  var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@3ba55ec7281d195cffca95251666dd25c0306073/greatness-detalle/';
   var URL = 'https://ticcorena.com/productos/remera-tcrn-greatness/';
   var STATS = [['BRILLO', '590', 1, '+590 cristales aplicados con calor'], ['TELA', '20/1', .92, 'Algodón de alto gramaje'],
                ['ESTAMPA', '44×50', .95, 'Serigrafía que no se quiebra ni se despinta'], ['RAREZA', 'ÚNICA', 1, 'Diseño único en el mundo']];
@@ -30,8 +30,8 @@
       + '#tcrn-det .tc-shine{background:linear-gradient(100deg,#0A0A0A 42%,#7a7a7a 47%,#e9e9e9 50%,#7a7a7a 53%,#0A0A0A 58%) 0 0/320% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tc-shine 5s ease-in-out infinite}'
       + '@keyframes tc-shine{0%{background-position:100% 0}45%,100%{background-position:0 0}}'
       + '#tcrn-det .tc-bajada{margin:22px 0 0;max-width:430px;font:400 15px/1.6 "Archivo",Arial,sans-serif;color:#4a4a4a}'
-      + '#tcrn-det .tc-como{margin:26px 0 0;display:flex;flex-wrap:wrap;gap:10px}'
-      + '#tcrn-det .tc-como span{font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;border:1px solid #cfcfca;padding:10px 12px;color:#3a3a3a}'
+      + '#tcrn-det .tc-como{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px}'
+      + '#tcrn-det .tc-como span{font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;border:1px solid #dcdcd7;padding:9px 11px;color:#8C8C8C}'
       + '#tcrn-det .tc-gyro{margin-top:14px;display:none;font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;background:#0A0A0A;color:#fff;border:0;padding:12px 14px;cursor:pointer}'
       + '#tcrn-det .tc-cta{display:inline-block;margin-top:30px;padding:17px 36px;background:#0A0A0A;color:#fff;text-decoration:none;font:600 10px/1 Unbounded,sans-serif;letter-spacing:.26em;transition:background .25s,transform .25s}'
       + '#tcrn-det .tc-cta:hover{background:#262626;transform:translateY(-2px)}'
@@ -87,8 +87,8 @@
       + '#tcrn-det .tc-d-volver{margin-top:9px;text-align:center;font:600 7px/1 Unbounded,sans-serif;letter-spacing:.2em;color:#777}'
       + '#tcrn-det .tc-toca{margin:52px 0 0;text-align:center;font:600 9px/1 Unbounded,sans-serif;letter-spacing:.26em;color:#8C8C8C}'
       + '@media (max-width:860px){#tcrn-det{padding:64px 0 76px}#tcrn-det .tc-in{grid-template-columns:1fr;gap:36px;padding:0 16px}'
-      + '#tcrn-det .tc-texto{display:contents}#tcrn-det .tc-kick{order:1;margin:0}#tcrn-det h2{order:2}#tcrn-det .tc-lado{order:3}'
-      + '#tcrn-det .tc-bajada{order:4;margin:0}#tcrn-det .tc-como{order:5;margin:0}#tcrn-det .tc-gyro{order:6}#tcrn-det .tc-cta{order:7;margin:0;display:block;text-align:center}'
+      + '#tcrn-det .tc-texto{display:contents}#tcrn-det .tc-kick{order:1;margin:0}#tcrn-det h2{order:2}#tcrn-det .tc-como{order:3;margin:-20px 0 0}#tcrn-det .tc-gyro{order:3;margin:-20px 0 0;justify-self:start}#tcrn-det .tc-lado{order:4}'
+      + '#tcrn-det .tc-bajada{order:5;margin:0}#tcrn-det .tc-cta{order:7;margin:0;display:block;text-align:center}'
       + '#tcrn-det .tc-carta{width:min(330px,82vw)}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -100,15 +100,15 @@
     s.innerHTML = '<div class="tc-in"><div class="tc-texto">'
       + '<p class="tc-kick"><i>★</i> CARTA LEGENDARIA · N.º 03</p>'
       + '<h2><span class="tc-shine">La mejor remera con brillos del país.</span></h2>'
-      + '<p class="tc-bajada">+590 cristales aplicados con calor, algodón 20/1 de alto gramaje y una serigrafía de 44 × 50 cm que no se quiebra. Y un diseño que no existe en ningún otro lado del mundo.</p>'
       + '<div class="tc-como"><span>' + (tactil ? 'INCLINÁ EL CELU' : 'MOVÉ EL MOUSE') + '</span><span>TOCALA PARA DARLA VUELTA</span></div>'
       + '<button type="button" class="tc-gyro">ACTIVAR MOVIMIENTO</button>'
+      + '<p class="tc-bajada">+590 cristales aplicados con calor, algodón 20/1 de alto gramaje y una serigrafía de 44 × 50 cm que no se quiebra. Y un diseño que no existe en ningún otro lado del mundo.</p>'
       + '<a class="tc-cta" href="' + URL + '">QUIERO LA GREATNESS</a></div>'
       + '<div class="tc-lado"><div class="tc-escena"><div class="tc-carta" role="button" tabindex="0" aria-label="Carta de la Greatness: tocá para darla vuelta">'
       + '<div class="tc-cara tc-frente"><div class="tc-int">'
-      + '<div class="tc-top"><span class="tc-nom">GREATNESS</span><span class="tc-leg">★ LEGENDARIA</span></div>'
+      + '<div class="tc-top"><span class="tc-nom">TICCORENA</span><span class="tc-leg">★ LEGENDARIA</span></div>'
       + '<div class="tc-arte"><img alt="Remera TCRN Greatness" src="' + BASE + 'obra-greatness.webp"></div>'
-      + '<p class="tc-tipo">REMERA · CUPIDO CON CORONA · N.º 03</p>'
+      + '<p class="tc-tipo">TCRN GREATNESS - FUERA DE SERIE</p>'
       + '<div class="tc-stats">' + stats + '</div>'
       + '<p class="tc-frase">“Para los que quieren brillar de verdad.”</p>'
       + '<div class="tc-pie"><span>TICCORENA · CÓRDOBA</span><span>2026</span></div></div>'
