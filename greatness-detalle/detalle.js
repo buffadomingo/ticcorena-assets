@@ -29,7 +29,8 @@
       + '#tcrn-det .td-link{display:inline-flex;align-items:center;gap:10px;font:600 12px/1 "Archivo",Arial,sans-serif;color:#0A0A0A;text-decoration:none}'
       + '#tcrn-det .td-link span{width:22px;height:22px;border:1.5px solid #0A0A0A;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;transition:transform .25s}'
       + '#tcrn-det .td-link:hover span{transform:translateX(4px)}'
-      + '#tcrn-det .td-esc{position:relative;margin-top:36px;aspect-ratio:100/' + (IMG_W * RATIO).toFixed(2) + '}'
+      + '#tcrn-det .td-esc{position:relative;margin-top:36px;aspect-ratio:100/' + (IMG_W * RATIO).toFixed(2) + ';--il:' + IMG_L + '%;--iw:' + (IMG_W / 100) + '}'
+      + '#tcrn-det .td-esc .td-p,#tcrn-det .td-esc .td-chis.bl{left:calc(var(--il) + var(--x) * var(--iw))}'
       + '#tcrn-det .td-img{position:absolute;left:' + IMG_L + '%;width:' + IMG_W + '%;top:0;filter:drop-shadow(0 30px 40px rgba(0,0,0,.18))}'
       + '#tcrn-det .td-p{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #0A0A0A;z-index:3}'
       + '#tcrn-det .td-p:before{content:"";position:absolute;inset:5px;border-radius:50%;background:#0A0A0A}'
@@ -42,8 +43,18 @@
       + '#tcrn-det .td-txt p{margin:0;font:400 13px/1.45 "Archivo",Arial,sans-serif;color:#555}'
       + '#tcrn-det .td-txt.izq{left:0;text-align:right}#tcrn-det .td-txt.der{right:0;text-align:left}'
       + '#tcrn-det .td-lista{display:none}'
+      /* brillos: reflejo que cruza el título + estrellitas */
+      + '#tcrn-det h2{display:inline-block;position:relative}'
+      + '#tcrn-det .td-shine{background:linear-gradient(100deg,#0A0A0A 42%,#7a7a7a 47%,#f2f2f2 50%,#7a7a7a 53%,#0A0A0A 58%) 0 0/320% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:td-shine 4.8s ease-in-out infinite}'
+      + '@keyframes td-shine{0%{background-position:100% 0}45%,100%{background-position:0 0}}'
+      + '#tcrn-det .td-chis{position:absolute;pointer-events:none;z-index:4;transform:translate(-50%,-50%) scale(0);animation:td-chis var(--d,3s) ease-in-out var(--w,0s) infinite}'
+      + '#tcrn-det .td-chis svg{display:block;width:100%;height:100%}'
+      + '#tcrn-det .td-chis.bl svg{fill:#fff;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px rgba(255,255,255,.75))}'
+      + '#tcrn-det .td-chis.ng svg{fill:#0A0A0A}'
+      + '@keyframes td-chis{0%,62%,100%{transform:translate(-50%,-50%) scale(0) rotate(0)}74%{transform:translate(-50%,-50%) scale(1) rotate(45deg)}86%{transform:translate(-50%,-50%) scale(.15) rotate(90deg)}}'
+      + '@media (prefers-reduced-motion:reduce){#tcrn-det .td-shine,#tcrn-det .td-chis{animation:none}#tcrn-det .td-shine{color:#0A0A0A;background:none}}'
       + '@media (max-width:767px){#tcrn-det{padding:56px 0 48px}#tcrn-det .td-in{padding:0 16px}'
-      + '#tcrn-det .td-esc{aspect-ratio:100/' + (100 * RATIO).toFixed(2) + ';margin-top:24px}#tcrn-det .td-img{left:0;width:100%}'
+      + '#tcrn-det .td-esc{aspect-ratio:100/' + (100 * RATIO).toFixed(2) + ';margin-top:24px;--il:0%;--iw:1}#tcrn-det .td-img{left:0;width:100%}'
       + '#tcrn-det .td-l,#tcrn-det .td-txt{display:none}'
       + '#tcrn-det .td-p{width:24px;height:24px;margin:-12px 0 0 -12px}#tcrn-det .td-p:before{display:none}'
       + '#tcrn-det .td-n{display:flex;position:absolute;inset:0;align-items:center;justify-content:center;font:600 11px/1 Unbounded,sans-serif;color:#0A0A0A}'
@@ -52,13 +63,30 @@
       + '#tcrn-det .td-lista b{display:block;font:600 11px/1.25 Unbounded,sans-serif;margin-bottom:4px}#tcrn-det .td-lista p{margin:0;font:400 12px/1.4 "Archivo",Arial,sans-serif;color:#555}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
-    var h = '<div class="td-in"><p class="td-kick">TCRN GREATNESS</p><h2>La mejor remera con brillos del país.</h2>'
+    var ESTRELLA = '<svg viewBox="0 0 24 24"><path d="M12 0C12.8 8.6 15.4 11.2 24 12 15.4 12.8 12.8 15.4 12 24 11.2 15.4 8.6 12.8 0 12 8.6 11.2 11.2 8.6 12 0Z"/></svg>';
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function chispa(cls, left, top, size, dur, wait) {
+      return '<span class="td-chis ' + cls + '" style="left:' + left + '%;--x:' + left + '%;top:' + top + '%;width:' + size + 'px;height:' + size + 'px;--d:' + dur.toFixed(2) + 's;--w:' + wait.toFixed(2) + 's">' + ESTRELLA + '</span>';
+    }
+    // estrellitas negras sobre el título
+    var tit = '';
+    [[6, 18], [31, 70], [58, 22], [88, 62], [47, 96], [16, 88]].forEach(function (q, i) {
+      tit += chispa('ng', q[0], q[1], Math.round(rnd(12, 20)), rnd(2.6, 3.8), i * 0.55);
+    });
+    // destellos blancos: muchos sobre las letras con strass, algunos sobre el cupido
+    var est = '';
+    for (var k = 0; k < 16; k++) {
+      var enLetras = k < 11;
+      var ix = enLetras ? rnd(20, 80) : rnd(28, 72), iy = enLetras ? rnd(19, 35) : rnd(40, 86);
+      est += chispa('bl', ix, iy, Math.round(enLetras ? rnd(14, 30) : rnd(10, 20)), rnd(2.4, 4), rnd(0, 4));
+    }
+    var h = '<div class="td-in"><p class="td-kick">TCRN GREATNESS</p><h2><span class="td-shine">La mejor remera con brillos del país.</span>' + tit + '</h2><br>'
       + '<a class="td-link" href="' + URL + '"><span>→</span>Ver la Greatness</a>'
-      + '<div class="td-esc"><a href="' + URL + '" aria-label="Ver la Greatness"><img class="td-img" src="' + IMG + '" alt="Remera TCRN Greatness" loading="lazy"></a>';
+      + '<div class="td-esc"><a href="' + URL + '" aria-label="Ver la Greatness"><img class="td-img" src="' + IMG + '" alt="Remera TCRN Greatness" loading="lazy"></a>' + est;
     PUNTOS.forEach(function (p, i) {
       var px = IMG_L + IMG_W * p.x / 100;         // % del escenario
       var top = p.y + '%';
-      h += '<span class="td-p" style="left:' + px + '%;top:' + top + '"><span class="td-n">' + (i + 1) + '</span></span>';
+      h += '<span class="td-p" style="--x:' + p.x + '%;top:' + top + '"><span class="td-n">' + (i + 1) + '</span></span>';
       if (p.lado === 'izq') h += '<span class="td-l" style="top:' + top + ';left:20.5%;width:' + (px - 20.5) + '%"></span>';
       else h += '<span class="td-l" style="top:' + top + ';left:' + px + '%;width:' + (79.5 - px) + '%"></span>';
       h += '<div class="td-txt ' + p.lado + '" style="top:' + top + '"><b>' + p.t + '</b><p>' + p.d + '</p></div>';
