@@ -8,7 +8,7 @@
   // x, y = % sobre la imagen · lado = dónde va el texto en PC
   var PUNTOS = [
     { x: 36, y: 27, lado: 'izq', t: '+590 strass', d: 'Aplicados con calor, uno al lado del otro.' },
-    { x: 90, y: 25, lado: 'der', t: 'Algodón 20/1', d: 'Tela de alto gramaje.' },
+    { x: 86, y: 33, lado: 'der', t: 'Algodón 20/1', d: 'Tela de alto gramaje.' },
     { x: 57, y: 44, lado: 'der', t: 'Diseño único', d: 'Único en el mundo. Sí, en el mundo.' },
     { x: 27, y: 56, lado: 'izq', t: 'Estampa 44 × 50 cm', d: 'No se quiebra ni se despinta.' }
   ];
@@ -44,7 +44,7 @@
       + '#tcrn-det .td-txt.izq{left:0;text-align:right}#tcrn-det .td-txt.der{right:0;text-align:left}'
       + '#tcrn-det .td-lista{display:none}'
       /* brillos: reflejo que cruza el título + estrellitas */
-      + '#tcrn-det h2{display:inline-block;position:relative}'
+      + '#tcrn-det h2{display:inline-block;position:relative;text-transform:uppercase}'
       + '#tcrn-det .td-shine{background:linear-gradient(100deg,#0A0A0A 42%,#7a7a7a 47%,#f2f2f2 50%,#7a7a7a 53%,#0A0A0A 58%) 0 0/320% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:td-shine 4.8s ease-in-out infinite}'
       + '@keyframes td-shine{0%{background-position:100% 0}45%,100%{background-position:0 0}}'
       + '#tcrn-det .td-chis{position:absolute;pointer-events:none;z-index:4;transform:translate(-50%,-50%) scale(0);animation:td-chis var(--d,3s) ease-in-out var(--w,0s) infinite}'
@@ -75,10 +75,10 @@
     });
     // destellos blancos: muchos sobre las letras con strass, algunos sobre el cupido
     var est = '';
-    for (var k = 0; k < 16; k++) {
-      var enLetras = k < 11;
+    for (var k = 0; k < 24; k++) {
+      var enLetras = k < 16;
       var ix = enLetras ? rnd(20, 80) : rnd(28, 72), iy = enLetras ? rnd(19, 35) : rnd(40, 86);
-      est += chispa('bl', ix, iy, Math.round(enLetras ? rnd(14, 30) : rnd(10, 20)), rnd(2.4, 4), rnd(0, 4));
+      est += chispa('bl', ix, iy, Math.round(enLetras ? rnd(20, 40) : rnd(12, 24)), rnd(2.2, 3.6), rnd(0, 3.6));
     }
     var h = '<div class="td-in"><p class="td-kick">TCRN GREATNESS</p><h2><span class="td-shine">La mejor remera con brillos del país.</span>' + tit + '</h2><br>'
       + '<a class="td-link" href="' + URL + '"><span>→</span>Ver la Greatness</a>'
