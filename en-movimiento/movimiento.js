@@ -1,11 +1,12 @@
-/* TICCORENA · "EN MOVIMIENTO" — fila de reels en la portada (15/11/26)
-   Se inserta después de "Productos destacados". Videos livianos (12 s, sin audio) servidos por jsDelivr.
-   Solo cargan/reproducen cuando están en pantalla. Tocar un video abre el reel en Instagram. */
+/* TICCORENA · "EN MOVIMIENTO" — fila de reels en la portada (v2 15/11/26, estilo wearvybes.com)
+   Fondo blanco, título chico al centro, videos grandes casi pegados, sin texto encima,
+   bolsita arriba a la derecha que lleva a la remera del video. Tocar el video abre el reel.
+   Se inserta después de "Productos destacados". Solo cargan/reproducen los videos que están en pantalla. */
 (function () {
   if (location.pathname !== '/' || window.__tcrnMov) return;
   var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@7df550c065cabba7591a346d1d20512eb7204ffa/en-movimiento/';
-  var IG = 'https://www.instagram.com/ticcorenastore/';
-  var LISTA = [{"video": "m04.mp4", "poster": "m04.jpg", "frase": "¿cuántos brillos?", "link": "https://www.instagram.com/reel/DfaT645juN4/"}, {"video": "m02.mp4", "poster": "m02.jpg", "frase": "los brillos de cerca", "link": "https://www.instagram.com/reel/Dfj78tTohKI/"}, {"video": "m07.mp4", "poster": "m07.jpg", "frase": "para la noche", "link": "https://www.instagram.com/reel/Det2k7Mo3bz/"}, {"video": "m09.mp4", "poster": "m09.jpg", "frase": "San Miguel", "link": "https://www.instagram.com/reel/DepTK40I61X/"}, {"video": "m10.mp4", "poster": "m10.jpg", "frase": "2 de la mañana", "link": "https://www.instagram.com/reel/Dd5ThVjxbaF/"}, {"video": "m17.mp4", "poster": "m17.jpg", "frase": "2 millones en su cumpleaños", "link": "https://www.instagram.com/reel/DdtsAYyxNPX/"}, {"video": "m20.mp4", "poster": "m20.jpg", "frase": "la mejor remera de Argentina", "link": "https://www.instagram.com/reel/Ddl9BUpRoAX/"}, {"video": "m25.mp4", "poster": "m25.jpg", "frase": "rehacer el drop", "link": "https://www.instagram.com/reel/DcSK5cVxXhZ/"}];
+  var LISTA = [{"video": "m04.mp4", "poster": "m04.jpg", "frase": "¿cuántos brillos?", "link": "https://www.instagram.com/reel/DfaT645juN4/", "producto": "https://ticcorena.com/productos/remera-tcrn-greatness/"}, {"video": "m02.mp4", "poster": "m02.jpg", "frase": "los brillos de cerca", "link": "https://www.instagram.com/reel/Dfj78tTohKI/", "producto": "https://ticcorena.com/productos/remera-tcrn-greatness/"}, {"video": "m07.mp4", "poster": "m07.jpg", "frase": "para la noche", "link": "https://www.instagram.com/reel/Det2k7Mo3bz/", "producto": "https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/"}, {"video": "m09.mp4", "poster": "m09.jpg", "frase": "San Miguel", "link": "https://www.instagram.com/reel/DepTK40I61X/", "producto": "https://ticcorena.com/productos/remera-tcrn-sanmiguel-1qexy/"}, {"video": "m10.mp4", "poster": "m10.jpg", "frase": "2 de la mañana", "link": "https://www.instagram.com/reel/Dd5ThVjxbaF/", "producto": "https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/"}, {"video": "m17.mp4", "poster": "m17.jpg", "frase": "2 millones en su cumpleaños", "link": "https://www.instagram.com/reel/DdtsAYyxNPX/", "producto": "https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/"}, {"video": "m20.mp4", "poster": "m20.jpg", "frase": "la mejor remera de Argentina", "link": "https://www.instagram.com/reel/Ddl9BUpRoAX/", "producto": "https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/"}, {"video": "m25.mp4", "poster": "m25.jpg", "frase": "rehacer el drop", "link": "https://www.instagram.com/reel/DcSK5cVxXhZ/", "producto": "https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/"}];
+  var BOLSA = '<svg viewBox="0 0 24 24" width="15" height="15" fill="#fff" aria-hidden="true"><path d="M7 7V6a5 5 0 0 1 10 0v1h3a1 1 0 0 1 1 1l-1 12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2L3 8a1 1 0 0 1 1-1h3zm2 0h6V6a3 3 0 0 0-6 0v1zm-1 3a1 1 0 0 0-1 1 5 5 0 0 0 10 0 1 1 0 1 0-2 0 3 3 0 0 1-6 0 1 1 0 0 0-1-1z"/></svg>';
 
   function init() {
     var ancla = document.querySelector('[data-store="home-products-featured"]');
@@ -15,52 +16,38 @@
 
     var css = ''
       + "@font-face{font-family:'Unbounded';font-style:normal;font-weight:600;font-display:swap;src:url(https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG68b244rNgQ.woff2) format('woff2')}"
-      + '#tcrn-mov{background:#0A0A0A;color:#fff;padding:72px 0 80px;overflow:hidden;position:relative}'
-      + '#tcrn-mov .tm-top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:0 40px;margin-bottom:28px}'
-      + '#tcrn-mov .tm-kick{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.3em;color:#8C8C8C;margin:0 0 14px;display:flex;align-items:center;gap:12px}'
-      + '#tcrn-mov .tm-kick:before{content:"";width:28px;height:1px;background:#8C8C8C}'
-      + '#tcrn-mov h2{font:600 clamp(26px,4.6vw,58px)/.95 Unbounded,sans-serif;letter-spacing:-.01em;margin:0;text-transform:uppercase;color:#fff}'
-      + '#tcrn-mov h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #fff}'
-      + '#tcrn-mov .tm-ig{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.24em;color:#fff;text-decoration:none;border-bottom:1px solid #fff;padding-bottom:6px;white-space:nowrap}'
-      + '#tcrn-mov .tm-nav{display:flex;gap:10px;margin-left:24px}'
-      + '#tcrn-mov .tm-nav button{width:44px;height:44px;border-radius:50%;border:1px solid #3a3a3a;background:transparent;color:#fff;font-size:18px;cursor:pointer;transition:border-color .2s,background .2s}'
-      + '#tcrn-mov .tm-nav button:hover{border-color:#fff;background:#151515}'
-      + '#tcrn-mov .tm-der{display:flex;align-items:center}'
-      + '#tcrn-mov .tm-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 40px 8px;scroll-padding:0 40px;scrollbar-width:none;cursor:grab}'
+      + '#tcrn-mov{background:#fff;padding:44px 0 56px;overflow:hidden}'
+      + '#tcrn-mov h2{font:600 15px/1.2 Unbounded,sans-serif;letter-spacing:.02em;text-align:center;color:#0A0A0A;margin:0 16px 18px}'
+      + '#tcrn-mov .tm-marco{max-width:1110px;margin:0 auto;position:relative}'
+      + '#tcrn-mov .tm-track{display:flex;gap:3px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}'
       + '#tcrn-mov .tm-track::-webkit-scrollbar{display:none}'
       + '#tcrn-mov .tm-track.arrastra{cursor:grabbing;scroll-snap-type:none}'
-      + '#tcrn-mov .tm-card{flex:0 0 auto;width:clamp(200px,19vw,260px);aspect-ratio:9/16;border-radius:14px;overflow:hidden;position:relative;scroll-snap-align:start;background:#151515;display:block;text-decoration:none;transform:translateZ(0)}'
-      + '#tcrn-mov .tm-card video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease,filter .4s}'
-      + '#tcrn-mov .tm-card:hover video{transform:scale(1.04)}'
-      + '#tcrn-mov .tm-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.0) 55%,rgba(0,0,0,.55));pointer-events:none}'
-      + '#tcrn-mov .tm-card:after{background:linear-gradient(180deg,rgba(0,0,0,0) 62%,rgba(0,0,0,.82))}'
-      + '#tcrn-mov .tm-frase{position:absolute;left:14px;right:14px;bottom:36px;text-align:left;font:600 12px/1.3 Unbounded,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#fff;z-index:1}'
-      + '#tcrn-mov .tm-ver{position:absolute;left:14px;bottom:16px;z-index:1;font:600 8.5px/1 Unbounded,sans-serif;letter-spacing:.22em;color:#8C8C8C}'
-      + '@media (max-width:767px){#tcrn-mov{padding:52px 0 56px}#tcrn-mov .tm-top{padding:0 16px;flex-direction:column;align-items:flex-start;gap:18px}'
-      + '#tcrn-mov .tm-track{padding:4px 16px 8px;scroll-padding:0 16px;gap:10px}#tcrn-mov .tm-card{width:58vw;border-radius:12px}#tcrn-mov .tm-nav{display:none}}';
+      + '#tcrn-mov .tm-card{flex:0 0 auto;width:270px;aspect-ratio:9/16;max-height:480px;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
+      + '#tcrn-mov .tm-reel{display:block;width:100%;height:100%}'
+      + '#tcrn-mov .tm-card video{width:100%;height:100%;object-fit:cover;display:block}'
+      + '#tcrn-mov .tm-bolsa{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:6px;background:rgba(40,40,40,.72);display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s,transform .2s}'
+      + '#tcrn-mov .tm-bolsa:hover{background:#0A0A0A;transform:scale(1.08)}'
+      + '@media (max-width:767px){#tcrn-mov{padding:34px 0 40px}#tcrn-mov h2{font-size:13px}#tcrn-mov .tm-card{width:62vw}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var s = document.createElement('section'); s.id = 'tcrn-mov';
-    var tarjetas = LISTA.map(function (v) {
-      return '<a class="tm-card" href="' + v.link + '" target="_blank" rel="noopener" aria-label="' + v.frase + '">'
-        + '<video muted loop playsinline preload="none" poster="' + BASE + v.poster + '" data-src="' + BASE + v.video + '"></video>'
-        + '<span class="tm-frase">' + v.frase + '</span><span class="tm-ver">VER REEL ↗</span></a>';
-    }).join('');
-    s.innerHTML = '<div class="tm-top"><div><p class="tm-kick">@TICCORENASTORE</p><h2>Ticcorena <em>en</em><br>movimiento</h2></div>'
-      + '<div class="tm-der"><a class="tm-ig" href="' + IG + '" target="_blank" rel="noopener">VER EN INSTAGRAM ↗</a>'
-      + '<div class="tm-nav"><button type="button" aria-label="Anterior">←</button><button type="button" aria-label="Siguiente">→</button></div></div></div>'
-      + '<div class="tm-track">' + tarjetas + '</div>';
+    s.innerHTML = '<h2>TICCORENA en movimiento 💎</h2><div class="tm-marco"><div class="tm-track">'
+      + LISTA.map(function (v) {
+        return '<div class="tm-card"><a class="tm-reel" href="' + v.link + '" target="_blank" rel="noopener" aria-label="Ver el reel">'
+          + '<video muted loop playsinline preload="none" poster="' + BASE + v.poster + '" data-src="' + BASE + v.video + '"></video></a>'
+          + '<a class="tm-bolsa" href="' + v.producto + '" aria-label="Ver la remera">' + BOLSA + '</a></div>';
+      }).join('') + '</div></div>';
 
     var seccion = ancla ? (ancla.closest('section') || ancla) : null;
     if (seccion && seccion.parentNode) seccion.parentNode.insertBefore(s, seccion.nextSibling);
     else box.appendChild(s);
 
     var track = s.querySelector('.tm-track');
-    // flechas (PC)
-    var bts = s.querySelectorAll('.tm-nav button');
-    function paso() { var c = track.querySelector('.tm-card'); return c ? (c.getBoundingClientRect().width + 14) * 2 : 400; }
-    bts[0].onclick = function () { track.scrollBy({ left: -paso(), behavior: 'smooth' }); };
-    bts[1].onclick = function () { track.scrollBy({ left: paso(), behavior: 'smooth' }); };
+    // que arranque cortado a los costados, como la referencia
+    requestAnimationFrame(function () {
+      var c = track.querySelector('.tm-card');
+      if (c && track.scrollWidth > track.clientWidth) track.scrollLeft = c.getBoundingClientRect().width * 0.45;
+    });
     // arrastrar con el mouse (PC); si se arrastró, no abre el link
     var abajo = false, x0 = 0, sl0 = 0, movido = false;
     track.addEventListener('mousedown', function (e) { abajo = true; movido = false; x0 = e.pageX; sl0 = track.scrollLeft; });
@@ -80,15 +67,13 @@
         es.forEach(function (en) {
           var v = en.target;
           if (en.isIntersecting) {
-            if (!v.src) { v.src = v.getAttribute('data-src'); }
+            if (!v.src) v.src = v.getAttribute('data-src');
             var p = v.play(); if (p && p.catch) p.catch(function () {});
-          } else { v.pause(); }
+          } else v.pause();
         });
-      }, { threshold: 0.35 });
+      }, { threshold: 0.25 });
       vids.forEach(function (v) { io.observe(v); });
-    } else {
-      vids.forEach(function (v) { v.src = v.getAttribute('data-src'); v.play(); });
-    }
+    } else vids.forEach(function (v) { v.src = v.getAttribute('data-src'); v.play(); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
