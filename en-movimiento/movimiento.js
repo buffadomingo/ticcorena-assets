@@ -19,7 +19,7 @@
       + '#tcrn-mov{background:#fff;padding:44px 0 56px;overflow:hidden}'
       + '#tcrn-mov h2{font:600 15px/1.2 Unbounded,sans-serif;letter-spacing:.02em;text-align:center;color:#0A0A0A;margin:0 16px 18px}'
       + '#tcrn-mov .tm-marco{max-width:1110px;margin:0 auto;position:relative}'
-      + '#tcrn-mov .tm-track{display:flex;gap:3px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}'
+      + '#tcrn-mov .tm-track{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}'
       + '#tcrn-mov .tm-track::-webkit-scrollbar{display:none}'
       + '#tcrn-mov .tm-track.arrastra{cursor:grabbing;scroll-snap-type:none}'
       + '#tcrn-mov .tm-card{flex:0 0 auto;width:270px;aspect-ratio:9/16;max-height:480px;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
@@ -31,31 +31,58 @@
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var s = document.createElement('section'); s.id = 'tcrn-mov';
-    s.innerHTML = '<h2>TICCORENA en movimiento 💎</h2><div class="tm-marco"><div class="tm-track">'
-      + LISTA.map(function (v) {
-        return '<div class="tm-card"><a class="tm-reel" href="' + v.producto + '" aria-label="Ver la remera">'
+    function tarjetas(copia) {
+      return LISTA.map(function (v) {
+        return '<div class="tm-card"' + (copia ? ' aria-hidden="true"' : '') + '><a class="tm-reel" href="' + v.producto + '" aria-label="Ver la remera"' + (copia ? ' tabindex="-1"' : '') + '>'
           + '<video muted loop playsinline preload="none" poster="' + BASE + v.poster + '" data-src="' + BASE + v.video + '"></video></a>'
-          + '<a class="tm-bolsa" href="' + v.producto + '" aria-label="Ver la remera">' + BOLSA + '</a></div>';
-      }).join('') + '</div></div>';
+          + '<a class="tm-bolsa" href="' + v.producto + '" aria-label="Ver la remera"' + (copia ? ' tabindex="-1"' : '') + '>' + BOLSA + '</a></div>';
+      }).join('');
+    }
+    // la lista va dos veces seguidas: la fila corre sola y da la vuelta sin que se note el salto
+    s.innerHTML = '<h2>TICCORENA en movimiento 💎</h2><div class="tm-marco"><div class="tm-track">'
+      + tarjetas(false) + tarjetas(true) + '</div></div>';
 
     var seccion = document.getElementById('tcrn-det') || (ancla ? (ancla.closest('section') || ancla) : null);
     if (seccion && seccion.parentNode) seccion.parentNode.insertBefore(s, seccion.nextSibling);
     else box.appendChild(s);
 
     var track = s.querySelector('.tm-track');
-    // que arranque cortado a los costados, como la referencia
+    // MOVIMIENTO SOLO: corre a velocidad fija; se frena mientras la persona la toca/arrastra y sigue 2 s después
+    var VEL = window.innerWidth < 768 ? 28 : 40;   // px por segundo
+    var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var pos = 0, ult = 0, pausaHasta = 0, tocando = false;
+    function mitad() { return track.scrollWidth / 2; }
+    function envolver() {
+      var m = mitad(); if (!m) return;
+      if (track.scrollLeft >= m) track.scrollLeft -= m;
+      else if (track.scrollLeft <= 0) track.scrollLeft += m;
+    }
+    function frenar() { pausaHasta = performance.now() + 2000; }
+    function paso(t) {
+      if (ult && !tocando && t > pausaHasta && !document.hidden) {
+        pos += VEL * Math.min(t - ult, 64) / 1000;
+        var m = mitad(); if (m && pos >= m) pos -= m;
+        track.scrollLeft = pos;
+      } else pos = track.scrollLeft;
+      ult = t; requestAnimationFrame(paso);
+    }
     requestAnimationFrame(function () {
       var c = track.querySelector('.tm-card');
-      if (c && track.scrollWidth > track.clientWidth) track.scrollLeft = c.getBoundingClientRect().width * 0.45;
+      pos = track.scrollLeft = c ? c.getBoundingClientRect().width * 0.45 : 0;   // arranca cortado a los costados
+      if (!quieto) requestAnimationFrame(paso);
     });
+    track.addEventListener('scroll', function () { if (tocando || performance.now() < pausaHasta) envolver(); }, { passive: true });
+    track.addEventListener('touchstart', function () { tocando = true; }, { passive: true });
+    track.addEventListener('touchend', function () { tocando = false; frenar(); }, { passive: true });
+    track.addEventListener('wheel', frenar, { passive: true });
     // arrastrar con el mouse (PC); si se arrastró, no abre el link
     var abajo = false, x0 = 0, sl0 = 0, movido = false;
-    track.addEventListener('mousedown', function (e) { abajo = true; movido = false; x0 = e.pageX; sl0 = track.scrollLeft; });
-    window.addEventListener('mouseup', function () { abajo = false; track.classList.remove('arrastra'); });
+    track.addEventListener('mousedown', function (e) { abajo = true; tocando = true; movido = false; x0 = e.pageX; sl0 = track.scrollLeft; });
+    window.addEventListener('mouseup', function () { if (abajo) { tocando = false; frenar(); } abajo = false; track.classList.remove('arrastra'); });
     track.addEventListener('mousemove', function (e) {
       if (!abajo) return; var dx = e.pageX - x0;
       if (Math.abs(dx) > 6) { movido = true; track.classList.add('arrastra'); }
-      track.scrollLeft = sl0 - dx;
+      track.scrollLeft = sl0 - dx; envolver(); if (track.scrollLeft !== sl0 - dx) { sl0 = track.scrollLeft + dx; }
     });
     track.addEventListener('click', function (e) { if (movido) { e.preventDefault(); movido = false; } }, true);
     track.addEventListener('dragstart', function (e) { e.preventDefault(); });
