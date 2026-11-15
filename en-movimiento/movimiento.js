@@ -38,7 +38,7 @@
           + '<a class="tm-bolsa" href="' + v.producto + '" aria-label="Ver la remera">' + BOLSA + '</a></div>';
       }).join('') + '</div></div>';
 
-    var seccion = ancla ? (ancla.closest('section') || ancla) : null;
+    var seccion = document.getElementById('tcrn-det') || (ancla ? (ancla.closest('section') || ancla) : null);
     if (seccion && seccion.parentNode) seccion.parentNode.insertBefore(s, seccion.nextSibling);
     else box.appendChild(s);
 
