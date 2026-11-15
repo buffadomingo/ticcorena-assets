@@ -16,22 +16,22 @@
 
     var css = ''
       + "@font-face{font-family:'Unbounded';font-style:normal;font-weight:600;font-display:swap;src:url(https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG68b244rNgQ.woff2) format('woff2')}"
-      + '#tcrn-mov{background:#fff;padding:44px 0 56px;overflow:hidden}'
+      + '#tcrn-mov{background:#fff;padding:44px 0 56px;overflow:visible}'
       + '#tcrn-mov .tm-slogan{margin:0 16px 12px;text-align:center;font:600 clamp(24px,3.6vw,46px)/1.05 Unbounded,sans-serif;letter-spacing:-.015em;text-transform:uppercase}'
       + '#tcrn-mov .tm-slogan span{background:linear-gradient(100deg,#0A0A0A 42%,#7a7a7a 47%,#e9e9e9 50%,#7a7a7a 53%,#0A0A0A 58%) 0 0/320% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tm-shine 5s ease-in-out infinite}'
       + '@keyframes tm-shine{0%{background-position:100% 0}45%,100%{background-position:0 0}}'
       + '@media (prefers-reduced-motion:reduce){#tcrn-mov .tm-slogan span{animation:none;background:none;color:#0A0A0A}}'
       + '#tcrn-mov h2{font:600 13px/1.2 Unbounded,sans-serif;letter-spacing:.02em;text-align:center;color:#6b6b6b;margin:0 16px 22px}'
-      + '#tcrn-mov .tm-marco{max-width:1110px;margin:0 auto;position:relative}'
+      + '#tcrn-mov .tm-marco{width:100%;margin:0;position:relative}'
       + '#tcrn-mov .tm-track{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}'
       + '#tcrn-mov .tm-track::-webkit-scrollbar{display:none}'
       + '#tcrn-mov .tm-track.arrastra{cursor:grabbing;scroll-snap-type:none}'
-      + '#tcrn-mov .tm-card{flex:0 0 auto;width:270px;aspect-ratio:9/16;max-height:480px;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
+      + '#tcrn-mov .tm-card{flex:0 0 auto;width:clamp(300px,26vw,460px);aspect-ratio:9/16;border-radius:6px;overflow:hidden;position:relative;scroll-snap-align:center;background:#111}'
       + '#tcrn-mov .tm-reel{display:block;width:100%;height:100%}'
       + '#tcrn-mov .tm-card video{width:100%;height:100%;object-fit:cover;display:block}'
       + '#tcrn-mov .tm-bolsa{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:6px;background:rgba(40,40,40,.72);display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s,transform .2s}'
       + '#tcrn-mov .tm-bolsa:hover{background:#0A0A0A;transform:scale(1.08)}'
-      + '@media (max-width:767px){#tcrn-mov{padding:34px 0 40px}#tcrn-mov h2{font-size:11px;margin-bottom:18px}#tcrn-mov .tm-card{width:62vw}}';
+      + '@media (max-width:767px){#tcrn-mov{padding:34px 0 40px}#tcrn-mov h2{font-size:11px;margin-bottom:18px}#tcrn-mov .tm-card{width:72vw}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var s = document.createElement('section'); s.id = 'tcrn-mov';
@@ -51,6 +51,14 @@
     else box.appendChild(s);
 
     var track = s.querySelector('.tm-track');
+    // la fila ocupa TODO el ancho de la pantalla aunque la tienda la meta en un contenedor angosto
+    var marco = s.querySelector('.tm-marco');
+    function aLoAncho() {
+      marco.style.marginLeft = '0px';
+      var izq = marco.getBoundingClientRect().left, ancho = document.documentElement.clientWidth;
+      marco.style.width = ancho + 'px'; marco.style.marginLeft = (-izq) + 'px';
+    }
+    aLoAncho(); window.addEventListener('resize', aLoAncho);
     // MOVIMIENTO SOLO: corre a velocidad fija; se frena mientras la persona la toca/arrastra y sigue 2 s después
     var VEL = window.innerWidth < 768 ? 28 : 40;   // px por segundo
     var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
