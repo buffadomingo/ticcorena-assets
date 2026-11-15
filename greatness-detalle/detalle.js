@@ -1,157 +1,149 @@
-/* TICCORENA · GREATNESS "LA PIEZA" — v3 galería clara + lupa de joyero (15/11/26)
-   Lo opuesto al hero (que es oscuro y centrado): fondo papel, remera colgada a la izquierda, título y
-   placa de museo a la derecha. Una lupa (mouse en PC, dedo en celular, o sola si nadie la toca) muestra
-   la estampa aumentada en alta resolución, con los strass REALES destellando adentro.
-   Datos de TABLA-GREATNESS.png. Se inserta después de "Productos destacados". Solo portada. */
+/* TICCORENA · "SALA TICCORENA" — v4 (15/11/26)
+   Sala de museo con las 3 remeras como obras colgadas (Warrior · Greatness · San Miguel), cada una con su luz
+   y su placa. Al tocar una obra se abre su ficha completa (datos de las tablas "Por qué no es una remera más"
+   de cada producto + precios de la tienda). Se inserta después de "Productos destacados". Solo portada. */
 (function () {
   if (location.pathname !== '/' || window.__tcrnDet) return;
-  var IMG = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@350dcb40f61c3dbe37f69ab3fadbe3f2f88adb98/greatness-detalle/greatness.webp', HD = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@350dcb40f61c3dbe37f69ab3fadbe3f2f88adb98/greatness-detalle/greatness-hd.webp';
-  var URL = 'https://ticcorena.com/productos/remera-tcrn-greatness/';
-  var RATIO = 1057 / 1100, ZOOM = 2.6;
+  var BASE = 'https://cdn.jsdelivr.net/gh/buffadomingo/ticcorena-assets@267df9252970fd42d30e36841b7bd3faff045cd8/greatness-detalle/';
+  var OBRAS = [
+    { id: 'warrior', n: '01', nombre: 'Warrior', sub: 'Ángel a caballo', anio: '2026', img: 'obra-warrior.webp',
+      url: 'https://ticcorena.com/productos/remera-tcrn-warrior-7l9x5/',
+      datos: [['Color', 'Negra'], ['Tela', 'Algodón 16/1 de alto gramaje'], ['Brillos', '+450 strass aplicados con calor'],
+              ['Estampa', 'Alta calidad, no se quiebra ni se despinta'], ['Diseño', 'Único en el mundo. Sí, en el mundo']],
+      precio: '$31.990', lista: '$35.550', envio: true },
+    { id: 'greatness', n: '03', nombre: 'Greatness', sub: 'Cupido con corona', anio: '2026', img: 'obra-greatness.webp', nueva: true,
+      url: 'https://ticcorena.com/productos/remera-tcrn-greatness/',
+      datos: [['Color', 'Negra'], ['Tela', 'Algodón 20/1 de alto gramaje'], ['Brillos', '+590 cristales aplicados con calor'],
+              ['Estampa', 'Serigrafía de 44 × 50 cm, no se quiebra ni se despinta'], ['Diseño', 'Único en el mundo. Sí, en el mundo']],
+      precio: '$36.990', lista: '$41.100', envio: false },
+    { id: 'sanmiguel', n: '02', nombre: 'San Miguel', sub: 'San Miguel Arcángel', anio: '2026', img: 'obra-sanmiguel.webp',
+      url: 'https://ticcorena.com/productos/remera-tcrn-sanmiguel-1qexy/',
+      datos: [['Color', 'Blanca'], ['Tela', 'Algodón 16/1 de alto gramaje'], ['Brillos', 'En el nombre de la marca'],
+              ['Estampa', '37 × 50 cm, grabado a una tinta'], ['Terminación', 'No se quiebra ni se despinta'], ['Diseño', 'Único en el mundo. Sí, en el mundo']],
+      precio: '$31.990', lista: '$35.550', envio: true }
+  ];
 
   function init() {
     var ancla = document.querySelector('[data-store="home-products-featured"]');
     var box = document.querySelector('.js-home-sections-container');
     if (!ancla && !box) return;
     window.__tcrnDet = 1;
-    var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var tactil = window.matchMedia && matchMedia('(hover: none)').matches;
 
     var css = ''
       + "@font-face{font-family:'Unbounded';font-style:normal;font-weight:600;font-display:swap;src:url(https://fonts.gstatic.com/s/unbounded/v12/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG68b244rNgQ.woff2) format('woff2')}"
       + "@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(https://fonts.gstatic.com/s/cormorantgaramond/v21/co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDD-iNM8.woff2) format('woff2')}"
-      + '#tcrn-det{background:#F4F4F2;color:#0A0A0A;padding:96px 0 100px;overflow:hidden}'
-      + '#tcrn-det .tg-in{max-width:1180px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1.15fr 1fr;gap:64px;align-items:center}'
-      /* remera colgada en la pared */
-      + '#tcrn-det .tg-pared{position:relative}'
-      + '#tcrn-det .tg-vit{position:relative;width:100%;aspect-ratio:1100/1057;touch-action:pan-y}'
-      + '#tcrn-det .tg-vit.mouse{cursor:none}'
-      + '#tcrn-det .tg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 34px 34px rgba(0,0,0,.22)) drop-shadow(0 6px 8px rgba(0,0,0,.12));user-select:none;pointer-events:none}'
-      + '#tcrn-det .tg-gancho{position:absolute;left:50%;top:-4.5%;width:2px;height:6%;background:#0A0A0A;transform:translateX(-50%);opacity:.75}'
-      + '#tcrn-det .tg-gancho:before{content:"";position:absolute;left:50%;top:-7px;width:8px;height:8px;border-radius:50%;border:1.5px solid #0A0A0A;transform:translateX(-50%)}'
-      /* lupa */
-      + '#tcrn-det .tg-lupa{position:absolute;left:0;top:0;width:var(--d,200px);height:var(--d,200px);border-radius:50%;overflow:hidden;pointer-events:none;z-index:3;'
-      + 'box-shadow:0 0 0 1px #0A0A0A,0 0 0 7px #F4F4F2,0 0 0 8px #0A0A0A,0 22px 40px rgba(0,0,0,.35);will-change:transform;opacity:0;transition:opacity .4s}'
-      + '#tcrn-det .tg-lupa.on{opacity:1}'
-      + '#tcrn-det .tg-lupa canvas{width:100%;height:100%;display:block;background:#111}'
-      + '#tcrn-det .tg-x{position:absolute;z-index:4;font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;background:#0A0A0A;color:#fff;padding:5px 7px;pointer-events:none;opacity:0;transition:opacity .4s;will-change:transform}'
-      + '#tcrn-det .tg-x.on{opacity:1}'
-      + '#tcrn-det .tg-pista{margin:34px 0 0;text-align:center;font:600 9px/1 Unbounded,sans-serif;letter-spacing:.28em;color:#8C8C8C;transition:opacity .6s}'
-      /* texto */
-      + '#tcrn-det .tg-kick{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.32em;color:#8C8C8C;margin:0 0 18px}'
-      + '#tcrn-det h2{font:600 clamp(26px,3.2vw,44px)/1.06 Unbounded,sans-serif;letter-spacing:-.015em;text-transform:uppercase;margin:0;color:#0A0A0A}'
-      + '#tcrn-det .tg-shine{background:linear-gradient(100deg,#0A0A0A 42%,#7a7a7a 47%,#e9e9e9 50%,#7a7a7a 53%,#0A0A0A 58%) 0 0/320% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tg-shine 5s ease-in-out infinite}'
-      + '@keyframes tg-shine{0%{background-position:100% 0}45%,100%{background-position:0 0}}'
-      + '#tcrn-det .tg-placa{margin:40px 0 0;padding:22px 26px 24px;border:1px solid #d4d4d0;background:#FAFAF8;position:relative;max-width:440px}'
-      + '#tcrn-det .tg-placa:before{content:"";position:absolute;left:26px;top:-1px;width:44px;height:2px;background:#0A0A0A}'
-      + '#tcrn-det .tg-obra{font:italic 500 32px/1 "Cormorant Garamond",Georgia,serif;margin:0 0 8px}'
-      + '#tcrn-det .tg-autor{font:600 9px/1.5 Unbounded,sans-serif;letter-spacing:.22em;color:#8C8C8C;margin:0 0 16px}'
-      + '#tcrn-det .tg-datos{margin:0;padding:14px 0 0;border-top:1px solid #e2e2de;list-style:none;font:400 13.5px/1.9 "Archivo",Arial,sans-serif;color:#3a3a3a}'
-      + '#tcrn-det .tg-datos li:before{content:"— ";color:#a5a5a5}'
-      + '#tcrn-det .tg-unica{margin:14px 0 0;font:italic 500 20px/1.2 "Cormorant Garamond",Georgia,serif}'
-      + '#tcrn-det .tg-cta{display:inline-block;margin-top:30px;padding:16px 36px;background:#0A0A0A;color:#fff;text-decoration:none;font:600 10px/1 Unbounded,sans-serif;letter-spacing:.26em;transition:background .25s,transform .25s}'
-      + '#tcrn-det .tg-cta:hover{background:#262626;transform:translateY(-2px)}'
-      + '@media (max-width:860px){#tcrn-det{padding:64px 0 68px}#tcrn-det .tg-in{grid-template-columns:1fr;gap:20px;padding:0 16px}'
-      + '#tcrn-det .tg-texto{display:contents}#tcrn-det .tg-kick{order:1;margin:0}#tcrn-det h2{order:2}#tcrn-det .tg-pared{order:3;margin-top:34px}'
-      + '#tcrn-det .tg-placa{order:4;margin-top:6px;max-width:none}#tcrn-det .tg-cta{order:5;margin-top:4px}'
-      + '#tcrn-det .tg-obra{font-size:28px}#tcrn-det .tg-datos{font-size:13px}#tcrn-det .tg-cta{display:block;text-align:center}}';
+      + '#tcrn-det{background:#EEEDE9;color:#0A0A0A;padding:90px 0 96px;overflow:hidden;position:relative}'
+      + '#tcrn-det:before{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(#e2e1dc,#d9d8d3);border-top:1px solid #d0cfca}'   /* zócalo */
+      + '#tcrn-det .ts-cab{text-align:center;padding:0 16px;position:relative}'
+      + '#tcrn-det .ts-kick{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.32em;color:#8C8C8C;margin:0 0 16px}'
+      + '#tcrn-det h2{font:italic 500 clamp(32px,4.4vw,56px)/1 "Cormorant Garamond",Georgia,serif;margin:0;letter-spacing:-.01em}'
+      + '#tcrn-det .ts-pared{display:flex;justify-content:center;align-items:flex-end;gap:clamp(28px,4.5vw,72px);padding:64px 40px 0;position:relative;max-width:1240px;margin:0 auto}'
+      + '#tcrn-det .ts-obra{flex:0 0 auto;width:clamp(220px,24vw,300px);position:relative;cursor:pointer;background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit}'
+      + '#tcrn-det .ts-obra.grande{width:clamp(260px,29vw,370px)}'
+      + '#tcrn-det .ts-luz{position:absolute;left:50%;top:-70px;width:170%;height:150%;transform:translateX(-50%);pointer-events:none;'
+      + 'background:radial-gradient(ellipse 36% 55% at 50% 0,rgba(255,255,255,.95),rgba(255,255,255,.35) 45%,transparent 72%);mix-blend-mode:soft-light;opacity:.85;transition:opacity .4s}'
+      + '#tcrn-det .ts-foco{position:absolute;left:50%;top:-62px;width:46px;height:10px;transform:translateX(-50%);background:#1a1a1a;border-radius:2px 2px 8px 8px}'
+      + '#tcrn-det .ts-foco:before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:14px;background:#1a1a1a;transform:translateX(-50%)}'
+      + '#tcrn-det .ts-marco{position:relative;background:#0A0A0A;padding:10px;box-shadow:0 26px 38px -14px rgba(0,0,0,.42),0 4px 10px rgba(0,0,0,.18);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}'
+      + '#tcrn-det .ts-paspartu{background:#FBFBF9;padding:12%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),inset 0 2px 6px rgba(0,0,0,.08)}'
+      + '#tcrn-det .ts-paspartu img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;filter:drop-shadow(0 10px 12px rgba(0,0,0,.18))}'
+      + '#tcrn-det .ts-obra:hover .ts-marco,#tcrn-det .ts-obra:focus-visible .ts-marco{transform:translateY(-6px);box-shadow:0 36px 46px -14px rgba(0,0,0,.48),0 6px 12px rgba(0,0,0,.2)}'
+      + '#tcrn-det .ts-obra:hover .ts-luz{opacity:1}'
+      + '#tcrn-det .ts-nueva{position:absolute;top:-11px;right:-11px;z-index:2;background:#0A0A0A;color:#fff;font:600 8.5px/1 Unbounded,sans-serif;letter-spacing:.2em;padding:7px 9px;border:1px solid #EEEDE9}'
+      + '#tcrn-det .ts-placa{margin:22px auto 0;width:max-content;max-width:100%;background:#FAFAF8;border:1px solid #d4d4d0;padding:10px 14px 11px;position:relative}'
+      + '#tcrn-det .ts-placa b{display:block;font:italic 500 19px/1.1 "Cormorant Garamond",Georgia,serif}'
+      + '#tcrn-det .ts-placa span{display:block;margin-top:5px;font:600 8px/1.4 Unbounded,sans-serif;letter-spacing:.18em;color:#8C8C8C;text-transform:uppercase}'
+      + '#tcrn-det .ts-ver{display:block;margin-top:12px;text-align:center;font:600 8.5px/1 Unbounded,sans-serif;letter-spacing:.22em;color:#0A0A0A;opacity:.55;transition:opacity .3s}'
+      + '#tcrn-det .ts-obra:hover .ts-ver{opacity:1}'
+      /* ficha (modal) */
+      + '#tcrn-ficha{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,10,10,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}'
+      + '#tcrn-ficha.on{opacity:1;pointer-events:auto}'
+      + '#tcrn-ficha .tf-caja{position:relative;background:#F7F7F5;color:#0A0A0A;width:min(980px,100%);max-height:calc(100vh - 48px);overflow:auto;display:grid;grid-template-columns:1.05fr 1fr;transform:translateY(18px) scale(.985);transition:transform .45s cubic-bezier(.2,.8,.2,1)}'
+      + '#tcrn-ficha.on .tf-caja{transform:none}'
+      + '#tcrn-ficha .tf-img{background:#EEEDE9;display:flex;align-items:center;justify-content:center;padding:40px}'
+      + '#tcrn-ficha .tf-img img{width:100%;height:auto;filter:drop-shadow(0 22px 24px rgba(0,0,0,.22))}'
+      + '#tcrn-ficha .tf-txt{padding:44px 40px 38px}'
+      + '#tcrn-ficha .tf-n{font:600 9px/1 Unbounded,sans-serif;letter-spacing:.28em;color:#8C8C8C;margin:0 0 14px}'
+      + '#tcrn-ficha h3{font:italic 500 46px/1 "Cormorant Garamond",Georgia,serif;margin:0}'
+      + '#tcrn-ficha .tf-sub{font:600 9px/1.5 Unbounded,sans-serif;letter-spacing:.2em;color:#8C8C8C;margin:10px 0 0;text-transform:uppercase}'
+      + '#tcrn-ficha dl{margin:26px 0 0;border-top:1px solid #dcdcd8}'
+      + '#tcrn-ficha dl div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid #e6e6e2}'
+      + '#tcrn-ficha dt{font:600 9px/1.6 Unbounded,sans-serif;letter-spacing:.16em;color:#8C8C8C;text-transform:uppercase}'
+      + '#tcrn-ficha dd{margin:0;font:400 14px/1.45 "Archivo",Arial,sans-serif;color:#1d1d1d}'
+      + '#tcrn-ficha .tf-precio{margin:26px 0 0;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}'
+      + '#tcrn-ficha .tf-precio b{font:600 30px/1 Unbounded,sans-serif}'
+      + '#tcrn-ficha .tf-precio span{font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;color:#8C8C8C}'
+      + '#tcrn-ficha .tf-extra{margin:8px 0 0;font:400 13px/1.5 "Archivo",Arial,sans-serif;color:#6b6b6b}'
+      + '#tcrn-ficha .tf-cta{display:block;margin-top:24px;padding:18px;background:#0A0A0A;color:#fff;text-align:center;text-decoration:none;font:600 10px/1 Unbounded,sans-serif;letter-spacing:.26em;transition:background .25s}'
+      + '#tcrn-ficha .tf-cta:hover{background:#262626}'
+      + '#tcrn-ficha .tf-nav{display:flex;justify-content:space-between;margin-top:18px}'
+      + '#tcrn-ficha .tf-nav button{background:none;border:0;padding:6px 0;cursor:pointer;font:600 9px/1 Unbounded,sans-serif;letter-spacing:.18em;color:#0A0A0A;opacity:.6}'
+      + '#tcrn-ficha .tf-nav button:hover{opacity:1}'
+      + '#tcrn-ficha .tf-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:1px solid #cfcfcb;background:#F7F7F5;cursor:pointer;font-size:18px;line-height:1;color:#0A0A0A;z-index:2}'
+      + '@media (max-width:860px){#tcrn-det{padding:64px 0 70px}#tcrn-det:before{height:10%}'
+      + '#tcrn-det .ts-pared{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;padding:76px 16px 8px;gap:26px;scrollbar-width:none;align-items:flex-start}'
+      + '#tcrn-det .ts-pared::-webkit-scrollbar{display:none}'
+      + '#tcrn-det .ts-obra,#tcrn-det .ts-obra.grande{width:70vw;scroll-snap-align:center}#tcrn-det .ts-obra.grande{order:-1}'
+      + '#tcrn-det .ts-desliza{display:block}'
+      + '#tcrn-ficha{padding:0;align-items:flex-end}#tcrn-ficha .tf-caja{grid-template-columns:1fr;max-height:92vh;transform:translateY(40px)}'
+      + '#tcrn-ficha .tf-img{padding:26px 60px}#tcrn-ficha .tf-txt{padding:26px 20px 30px}#tcrn-ficha h3{font-size:38px}#tcrn-ficha dl div{grid-template-columns:96px 1fr}}'
+      + '#tcrn-det .ts-desliza{display:none;text-align:center;margin:18px 0 0;font:600 8.5px/1 Unbounded,sans-serif;letter-spacing:.24em;color:#8C8C8C;position:relative}'
+      + '@media (min-width:861px){#tcrn-det .ts-desliza{display:none!important}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var s = document.createElement('section'); s.id = 'tcrn-det';
-    s.innerHTML = '<div class="tg-in">'
-      + '<div class="tg-pared"><div class="tg-vit' + (tactil ? '' : ' mouse') + '"><span class="tg-gancho"></span>'
-      + '<a href="' + URL + '" aria-label="Ver la Greatness"><img class="tg-img" alt="Remera TCRN Greatness" src="' + IMG + '" loading="lazy"></a>'
-      + '<div class="tg-lupa"><canvas></canvas></div><span class="tg-x">×' + ZOOM.toString().replace('.', ',') + '</span></div>'
-      + '<p class="tg-pista">' + (tactil ? 'DESLIZÁ EL DEDO PARA VER DE CERCA' : 'PASÁ LA LUPA POR LA REMERA') + '</p></div>'
-      + '<div class="tg-texto"><p class="tg-kick">TCRN GREATNESS</p><h2><span class="tg-shine">La mejor remera con brillos del país.</span></h2>'
-      + '<div class="tg-placa"><p class="tg-obra">Greatness</p><p class="tg-autor">TICCORENA · CÓRDOBA, ARGENTINA · 2026</p>'
-      + '<ul class="tg-datos"><li>Algodón 20/1 de alto gramaje</li><li>+590 cristales aplicados con calor</li><li>Serigrafía de 44 × 50 cm que no se quiebra ni se despinta</li></ul>'
-      + '<p class="tg-unica">Pieza única en el mundo.</p></div>'
-      + '<a class="tg-cta" href="' + URL + '">VER LA PIEZA</a></div></div>';
+    s.innerHTML = '<div class="ts-cab"><p class="ts-kick">SALA TICCORENA · COLECCIÓN 2026</p><h2>Tres piezas. Ninguna se repite.</h2></div>'
+      + '<div class="ts-pared">' + OBRAS.map(function (o, i) {
+        return '<button type="button" class="ts-obra' + (o.nueva ? ' grande' : '') + '" data-i="' + i + '" aria-label="Ver la ficha de ' + o.nombre + '">'
+          + '<span class="ts-luz"></span><span class="ts-foco"></span>'
+          + '<span class="ts-marco">' + (o.nueva ? '<span class="ts-nueva">NUEVA</span>' : '')
+          + '<span class="ts-paspartu"><img src="' + BASE + o.img + '" alt="Remera TCRN ' + o.nombre + '" loading="lazy"></span></span>'
+          + '<span class="ts-placa"><b>' + o.nombre + '</b><span>N.º ' + o.n + ' · ' + o.sub + ' · ' + o.anio + '</span></span>'
+          + '<span class="ts-ver">TOCÁ PARA VER LA FICHA</span></button>';
+      }).join('') + '</div><p class="ts-desliza">DESLIZÁ PARA RECORRER LA SALA →</p>';
 
     var seccion = ancla ? (ancla.closest('section') || ancla) : null;
     if (seccion && seccion.parentNode) seccion.parentNode.insertBefore(s, seccion.nextSibling);
     else box.appendChild(s);
 
-    var vit = s.querySelector('.tg-vit'), lupa = s.querySelector('.tg-lupa'), xz = s.querySelector('.tg-x');
-    var cv = lupa.querySelector('canvas'), ctx = cv.getContext('2d'), pista = s.querySelector('.tg-pista');
-    var W = 0, H = 0, D = 200, DPR = Math.min(window.devicePixelRatio || 1, 2);
-    function medir() {
-      var r = vit.getBoundingClientRect(); W = r.width; H = r.height;
-      D = Math.round(Math.max(130, Math.min(230, W * 0.36)));
-      lupa.style.setProperty('--d', D + 'px'); cv.width = D * DPR; cv.height = D * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
-    medir(); window.addEventListener('resize', medir);
+    // en celular, arrancar mostrando la Greatness (que va primera)
+    var pared = s.querySelector('.ts-pared');
+    requestAnimationFrame(function () { pared.scrollLeft = 0; });
 
-    // imagen grande para la lupa + strass reales (píxeles brillantes)
-    var hd = new Image(), hdOk = false, P = [];
-    hd.crossOrigin = 'anonymous';
-    hd.onload = function () {
-      hdOk = true;
-      try {
-        var w = 600, h = Math.round(w * RATIO), oc = document.createElement('canvas'); oc.width = w; oc.height = h;
-        var c2 = oc.getContext('2d'); c2.drawImage(hd, 0, 0, w, h);
-        var d = c2.getImageData(0, 0, w, h).data, cand = [];
-        for (var y = 0; y < h; y += 2) for (var x = 0; x < w; x += 2) {
-          var i = (y * w + x) * 4, L = (d[i] + d[i + 1] + d[i + 2]) / 3;
-          var letras = y > h * .16 && y < h * .38 && x > w * .17 && x < w * .83;
-          if (d[i + 3] > 200 && ((letras && L > 205) || (!letras && y > h * .36 && y < h * .9 && x > w * .2 && x < w * .8 && L > 240)))
-            cand.push([x / w, y / h, Math.random() * 6.28, .7 + Math.random() * 1.8, letras ? 1 : .6]);
-        }
-        for (var k = cand.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)), t = cand[k]; cand[k] = cand[j]; cand[j] = t; }
-        P = cand.slice(0, 1400);
-      } catch (e) { P = []; }
-    };
-
-    var lx = .45, ly = .3, tx = .45, ty = .3, ultimo = -1e9, visible = false, t0 = performance.now();
-    function mover(e) {
-      var r = vit.getBoundingClientRect();
-      tx = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); ty = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
-      ultimo = performance.now(); pista.style.opacity = 0;
+    // ficha
+    var f = document.createElement('div'); f.id = 'tcrn-ficha'; f.setAttribute('role', 'dialog'); f.setAttribute('aria-modal', 'true');
+    document.body.appendChild(f);
+    var actual = 0, overflowAntes = '';
+    function pintar(i) {
+      var o = OBRAS[i]; actual = i;
+      var ant = OBRAS[(i + OBRAS.length - 1) % OBRAS.length], sig = OBRAS[(i + 1) % OBRAS.length];
+      f.innerHTML = '<div class="tf-caja"><button type="button" class="tf-x" aria-label="Cerrar">×</button>'
+        + '<div class="tf-img"><img src="' + BASE + o.img + '" alt="Remera TCRN ' + o.nombre + '"></div>'
+        + '<div class="tf-txt"><p class="tf-n">N.º ' + o.n + ' · SALA TICCORENA' + (o.nueva ? ' · NUEVA' : '') + '</p>'
+        + '<h3>' + o.nombre + '</h3><p class="tf-sub">' + o.sub + ' · Córdoba, Argentina · ' + o.anio + '</p>'
+        + '<dl>' + o.datos.map(function (d) { return '<div><dt>' + d[0] + '</dt><dd>' + d[1] + '</dd></div>'; }).join('') + '</dl>'
+        + '<div class="tf-precio"><b>' + o.precio + '</b><span>CON TRANSFERENCIA</span></div>'
+        + '<p class="tf-extra">Precio de lista ' + o.lista + ' · 3 cuotas sin interés' + (o.envio ? ' · Envío gratis' : '') + '</p>'
+        + '<a class="tf-cta" href="' + o.url + '">COMPRAR LA ' + o.nombre.toUpperCase() + '</a>'
+        + '<div class="tf-nav"><button type="button" data-i="' + OBRAS.indexOf(ant) + '">← ' + ant.nombre.toUpperCase() + '</button>'
+        + '<button type="button" data-i="' + OBRAS.indexOf(sig) + '">' + sig.nombre.toUpperCase() + ' →</button></div></div></div>';
     }
-    vit.addEventListener('pointermove', mover); vit.addEventListener('pointerdown', mover);
-
-    function destello(x, y, a, sz) {
-      var g = ctx.createRadialGradient(x, y, 0, x, y, sz * 2.4);
-      g.addColorStop(0, 'rgba(255,255,255,' + (a * .95) + ')'); g.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, sz * 2.4, 0, 6.283); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,' + a + ')'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(x - sz * 3, y); ctx.lineTo(x + sz * 3, y); ctx.moveTo(x, y - sz * 3); ctx.lineTo(x, y + sz * 3); ctx.stroke();
+    function abrir(i) {
+      pintar(i); overflowAntes = document.documentElement.style.overflow; document.documentElement.style.overflow = 'hidden';
+      requestAnimationFrame(function () { f.classList.add('on'); var x = f.querySelector('.tf-x'); if (x) x.focus(); });
     }
-
-    function cuadro(now) {
-      if (!visible) return; requestAnimationFrame(cuadro);
-      var t = (now - t0) / 1000;
-      if (now - ultimo > 2500) { tx = .5 + .26 * Math.sin(t * .42); ty = .36 + .15 * Math.sin(t * .67 + 1); }
-      lx += (tx - lx) * .14; ly += (ty - ly) * .14;
-      var cx = lx * W, cy = ly * H;
-      lupa.style.transform = 'translate(' + (cx - D / 2) + 'px,' + (cy - D / 2) + 'px)';
-      xz.style.transform = 'translate(' + (cx + D * .32) + 'px,' + (cy + D * .32) + 'px)';
-      if (!hdOk) return;
-      lupa.classList.add('on'); xz.classList.add('on');
-      // recorte de la imagen grande que corresponde a la lupa
-      var vw = D / ZOOM, vh = D / ZOOM;                        // tamaño del área vista, en px de la vitrina
-      var sx = (cx - vw / 2) / W * hd.naturalWidth, sy = (cy - vh / 2) / H * hd.naturalHeight;
-      var sw = vw / W * hd.naturalWidth, sh = vh / H * hd.naturalHeight;
-      ctx.fillStyle = '#F4F4F2'; ctx.fillRect(0, 0, D, D);
-      ctx.drawImage(hd, sx, sy, sw, sh, 0, 0, D, D);
-      ctx.globalCompositeOperation = 'lighter';
-      for (var k = 0; k < P.length; k++) {
-        var p = P[k], px = (p[0] * W - (cx - vw / 2)) * ZOOM, py = (p[1] * H - (cy - vh / 2)) * ZOOM;
-        if (px < -10 || py < -10 || px > D + 10 || py > D + 10) continue;
-        var tw = Math.sin(t * p[3] * 2.4 + p[2]); if (tw < .6) continue;
-        var a = (tw - .6) / .4 * p[4] * .85;
-        destello(px, py, Math.min(1, a), .9 + 2.2 * a);
-      }
-      ctx.globalCompositeOperation = 'source-over';
-    }
-    if (quieto) { lupa.style.display = 'none'; xz.style.display = 'none'; pista.style.display = 'none'; return; }
-    function arrancar() { if (!hd.src) hd.src = HD; medir(); requestAnimationFrame(cuadro); }
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) {
-        es.forEach(function (en) { var antes = visible; visible = en.isIntersecting; if (visible && !antes) arrancar(); });
-      }, { rootMargin: '200px 0px', threshold: 0 }).observe(vit);
-    } else { visible = true; arrancar(); }
+    function cerrar() { f.classList.remove('on'); document.documentElement.style.overflow = overflowAntes; }
+    s.querySelectorAll('.ts-obra').forEach(function (b) { b.addEventListener('click', function () { abrir(+b.getAttribute('data-i')); }); });
+    f.addEventListener('click', function (e) {
+      if (e.target === f || e.target.closest('.tf-x')) return cerrar();
+      var n = e.target.closest('.tf-nav button'); if (n) pintar(+n.getAttribute('data-i'));
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!f.classList.contains('on')) return;
+      if (e.key === 'Escape') cerrar();
+      if (e.key === 'ArrowRight') pintar((actual + 1) % OBRAS.length);
+      if (e.key === 'ArrowLeft') pintar((actual + OBRAS.length - 1) % OBRAS.length);
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
