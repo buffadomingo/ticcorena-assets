@@ -43,7 +43,7 @@
       }).join('');
     }
     // la lista va dos veces seguidas: la fila corre sola y da la vuelta sin que se note el salto
-    s.innerHTML = '<h2>TICCORENA en movimiento 💎</h2><div class="tm-marco"><div class="tm-track">'
+    s.innerHTML = '<p class="tm-slogan"><span>Si brilla, es TICCORENA.</span></p><h2>TICCORENA en movimiento 💎</h2><div class="tm-marco"><div class="tm-track">'
       + tarjetas(false) + tarjetas(true) + '</div></div>';
 
     var seccion = document.getElementById('tcrn-det') || (ancla ? (ancla.closest('section') || ancla) : null);
