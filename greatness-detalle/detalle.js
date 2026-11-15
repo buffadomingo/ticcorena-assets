@@ -27,7 +27,8 @@
       /* vitrina */
       + '#tcrn-det .tp-vitrina{position:relative;width:min(560px,88vw);margin:34px auto 0;aspect-ratio:1100/1057;touch-action:pan-y;cursor:none}'
       + '#tcrn-det .tp-cono{position:absolute;left:50%;top:-34%;width:150%;height:150%;transform:translateX(-50%);pointer-events:none;'
-      + 'background:radial-gradient(ellipse 34% 62% at 50% 0,rgba(255,255,255,.13),rgba(255,255,255,.04) 55%,transparent 75%)}'
+      + 'background:radial-gradient(ellipse 30% 58% at 50% 8%,rgba(255,255,255,.12),rgba(255,255,255,.035) 55%,transparent 72%);'
+      + '-webkit-mask-image:linear-gradient(to bottom,transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 30%,#000 70%,transparent)}'
       + '#tcrn-det .tp-piso{position:absolute;left:12%;right:12%;bottom:-7%;height:12%;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at center,rgba(255,255,255,.10),transparent 70%)}'
       + '#tcrn-det .tp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}'
       + '#tcrn-det .tp-base{filter:brightness(.42) contrast(1.05)}'
