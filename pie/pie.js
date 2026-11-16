@@ -6,6 +6,7 @@
   if (window.__tcrnPie) return;
   var FRASE = 'FUERA DE SERIE.';
   var IG = 'https://www.instagram.com/ticcorenastore/';
+  var API = 'https://greatness.ticcorena.com/api/lista';
 
   function init() {
     var f = document.querySelector('footer[data-store="footer"]');
@@ -32,6 +33,10 @@
       + '.tp-ok .tp-lista p{margin:0 0 16px;font:400 13px/1.55 "Archivo",Arial,sans-serif;color:#b5b5b5;max-width:340px}'
       + '.tp-ok .tp-lista .input-append{display:flex;gap:0;border-bottom:1px solid #fff;max-width:380px}'
       + '.tp-ok .tp-lista .form-group{flex:1}'
+      + '.tp-ok .tp-lista .form-group{margin:0}.tp-ok .tp-lista button.newsletter-btn{cursor:pointer}.tp-ok .tp-lista button:disabled{opacity:.5}'
+      + '.tp-ok .tp-msg{margin:12px 0 0!important;font:500 13px/1.4 "Archivo",Arial,sans-serif!important;color:#fff!important;min-height:1px}'
+      + '.tp-ok .tp-lista input[type=text]{width:100%;outline:none;background:transparent!important;border:0!important;color:#fff!important;padding:12px 0!important;height:auto!important;font:400 14px "Archivo",Arial,sans-serif!important;box-shadow:none!important}'
+      + '.tp-ok .tp-lista input[type=text]::placeholder{color:#6f6f6f}'
       + '.tp-ok .tp-lista input[type=email]{background:transparent!important;border:0!important;color:#fff!important;padding:12px 0!important;height:auto!important;font:400 14px "Archivo",Arial,sans-serif!important;box-shadow:none!important}'
       + '.tp-ok .tp-lista input[type=email]::placeholder{color:#6f6f6f}'
       + '.tp-ok .tp-lista .newsletter-btn{background:#fff!important;color:#0A0A0A!important;border:0!important;margin:6px 0!important;padding:0 16px!important;font:600 9px/1 Unbounded,sans-serif!important;letter-spacing:.2em;text-decoration:none!important;text-transform:uppercase}'
@@ -72,7 +77,7 @@
 
     var cLogo = el('div', 'tp-col tp-logo');
     if (logo) { if (logo.dataset.src && !/empty-placeholder/.test(logo.dataset.src)) logo.src = logo.dataset.src; logo.classList.remove('lazyload'); cLogo.appendChild(logo); }
-    cLogo.appendChild(el('p', '', 'Remeras con brillos, hechas en Córdoba.'));
+    cLogo.appendChild(el('p', '', 'Creado para los que quieren brillar de verdad.'));
     grid.appendChild(cLogo);
 
     var cTienda = el('div', 'tp-col', '<h4>TIENDA</h4>');
@@ -86,13 +91,22 @@
     if (mail) ul.appendChild(el('li', '', '<a href="' + mail.getAttribute('href') + '">' + mail.textContent.trim() + '</a>'));
     cCont.appendChild(ul); grid.appendChild(cCont);
 
-    var cLista = el('div', 'tp-col tp-lista', '<h4>LISTA PRIVADA</h4><p>Dejá tu mail y entrás a la lista: ofertas, descuentos y los próximos drops antes que en ningún lado.</p>');
-    if (news) {
-      var inp = news.querySelector('input[type=email]'); if (inp) inp.placeholder = 'tunombre@mail.com';
-      var btn = news.querySelector('.newsletter-btn'); if (btn) btn.value = 'LO QUIERO';
-      cLista.appendChild(news);
-    }
+    // LISTA PRIVADA: se pide el @ de Instagram (no el mail) y va al mismo KV del envío gratis (Cloudflare, claves "lista:")
+    var cLista = el('div', 'tp-col tp-lista', '<h4>LISTA PRIVADA</h4><p>Dejá tu usuario de Instagram y entrás a la lista: ofertas, descuentos y los próximos drops antes que en ningún lado.</p>'
+      + '<form class="tp-form" novalidate><div class="input-append"><div class="form-group"><input type="text" name="ig" placeholder="@tuusuario" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Tu usuario de Instagram" maxlength="31"></div>'
+      + '<button type="submit" class="newsletter-btn">LO QUIERO</button></div><p class="tp-msg" aria-live="polite"></p></form>');
     grid.appendChild(cLista);
+    var form = cLista.querySelector('.tp-form'), msg = cLista.querySelector('.tp-msg');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var ig = form.ig.value.trim().replace(/^@/, '').toLowerCase();
+      if (!/^[a-z0-9._]{1,30}$/.test(ig)) { msg.textContent = 'Escribí tu usuario de Instagram, por ejemplo @tuusuario.'; return; }
+      var b = form.querySelector('button'); b.disabled = true; msg.textContent = '';
+      fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ig: ig }) })
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (d) { form.querySelector('.input-append').style.display = 'none'; msg.textContent = d.repetido ? '@' + ig + ' ya estaba en la lista privada.' : 'Listo, @' + ig + ': ya estás en la lista privada.'; })
+        .catch(function () { b.disabled = false; msg.textContent = 'No se pudo anotar. Probá de nuevo en un rato.'; });
+    });
     nuevo.appendChild(grid);
 
     if (sellos) { var s = el('div', 'tp-sellos'); s.appendChild(sellos); nuevo.appendChild(s); }
