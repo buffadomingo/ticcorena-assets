@@ -57,6 +57,11 @@
     + '#tgv-h .h-talles button:disabled{opacity:.3;text-decoration:line-through;cursor:default}'
     + '#tgv-h .h-comprar{width:100%;height:50px;border:0;border-radius:8px;background:#fff;color:#0A0A0A;font:600 13px/1 Unbounded,sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:opacity .2s}'
     + '#tgv-h .h-comprar.falta{opacity:.55}'
+    + '#tgv-h .h-flecha{display:none;position:absolute;top:50%;z-index:4;width:52px;height:52px;margin-top:-26px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#0A0A0A;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.35);transition:transform .15s,background .15s}'
+    + '#tgv-h .h-flecha:hover{transform:scale(1.08);background:#fff}'
+    + '#tgv-h .h-ant{left:calc(50% - (94vh * 9 / 32) - 76px)}#tgv-h .h-sig{right:calc(50% - (94vh * 9 / 32) - 76px)}'
+    + '#tgv-h .h-flecha.oculta{visibility:hidden}'
+    + '@media (min-width:768px){#tgv-h .h-flecha{display:flex}}'
     + '#tgv-h .h-aviso{height:16px;margin-top:8px;text-align:center;font-size:12px;opacity:.8}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -74,7 +79,11 @@
   function armarHistorias() {
     h = document.createElement('div'); h.id = 'tgv-h'; h.setAttribute('role', 'dialog'); h.setAttribute('aria-label', 'Greatness en movimiento');
     var talles = [].slice.call(document.querySelectorAll('.js-insta-variant[data-variation-id="0"]'));
-    h.innerHTML = '<div class="h-fondo"></div><div class="h-col">'
+    var FL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+    h.innerHTML = '<div class="h-fondo"></div>'
+      + '<button type="button" class="h-flecha h-ant" aria-label="Video anterior">' + FL.replace('<svg ', '<svg style="transform:scaleX(-1)" ') + '</button>'
+      + '<button type="button" class="h-flecha h-sig" aria-label="Video siguiente">' + FL + '</button>'
+      + '<div class="h-col">'
       + '<video playsinline muted preload="auto"></video><div class="h-sombra"></div>'
       + '<div class="h-barras">' + HIST.map(function () { return '<span><i></i></span>'; }).join('') + '</div>'
       + '<div class="h-top"><b>TICCORENA</b><small>Greatness</small><button class="h-cerrar" aria-label="Cerrar">' + X + '</button></div>'
@@ -91,6 +100,8 @@
     h.querySelector('.h-cerrar').addEventListener('click', cerrar);
     h.querySelector('.h-izq').addEventListener('click', function () { ir(actual - 1); });
     h.querySelector('.h-der').addEventListener('click', function () { ir(actual + 1); });
+    h.querySelector('.h-ant').addEventListener('click', function () { ir(actual - 1); });
+    h.querySelector('.h-sig').addEventListener('click', function () { ir(actual + 1); });
     vid.addEventListener('ended', function () { ir(actual + 1); });
 
     // mantener apretado = pausa (como IG); deslizar hacia abajo = cerrar
@@ -143,6 +154,8 @@
     if (i < 0) i = 0;
     if (i >= HIST.length) { cerrar(); return; }
     actual = i;
+    h.querySelector('.h-ant').classList.toggle('oculta', i === 0);
+    h.querySelector('.h-sig').classList.toggle('oculta', i === HIST.length - 1);
     vid.poster = BASE + HIST[i] + '-hist.jpg';
     fondo.style.backgroundImage = 'url(' + BASE + HIST[i] + '-hist.jpg)';
     vid.src = BASE + HIST[i] + '-hist.mp4';
