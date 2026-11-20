@@ -34,12 +34,15 @@
       + '#tcrn-res .tr-nota b{font-size:16px;letter-spacing:2px;color:#fff}'
       + '#tcrn-res .tr-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}'
       + '#tcrn-res .tr-track::-webkit-scrollbar{display:none}'
-      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 28px) / 3);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;padding:26px 24px 22px;min-height:340px}'
+      /* tarjeta: 65 % lo que dice · 35 % la foto (al costado en PC, arriba en el celu) */
+      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 14px) / 2);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:grid;grid-template-columns:65fr 35fr;min-height:360px}'
+      + '#tcrn-res .tr-txt{display:flex;flex-direction:column;padding:26px 24px 22px;min-width:0}'
+      + '#tcrn-res .tr-img{display:block;width:100%;height:100%;border:0;padding:0;margin:0;background:#1b1b1b center/cover no-repeat;cursor:zoom-in;position:relative}'
+      + '#tcrn-res .tr-img:after{content:"⤢";position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font:14px/26px Arial,sans-serif;text-align:center}'
       + '#tcrn-res .tr-st{font-size:16px;letter-spacing:3px;color:#fff;line-height:1}'
       + '#tcrn-res .tr-comilla{display:block;margin:18px 0 -14px;font:600 64px/.6 Unbounded,sans-serif;color:#3a3a3a;height:30px}'
       + '#tcrn-res .tr-card p{margin:0 0 22px;font:600 clamp(19px,1.7vw,23px)/1.3 Unbounded,sans-serif;letter-spacing:-.01em;color:#fff;text-transform:none}'
       + '#tcrn-res .tr-pie{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #262626}'
-      + '#tcrn-res .tr-foto{flex:0 0 auto;width:52px;height:52px;border-radius:8px;border:1px solid #333;background:#1b1b1b center/cover no-repeat;cursor:zoom-in;padding:0}'
       + '#tcrn-res .tr-datos{display:flex;flex-direction:column;gap:7px;min-width:0}'
       + '#tcrn-res .tr-quien{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.16em;color:#fff}'
       + '#tcrn-res .tr-ver{align-self:flex-start;font:600 7.5px/1 Unbounded,sans-serif;letter-spacing:.14em;color:#0A0A0A;background:#fff;padding:5px 7px;border-radius:3px;white-space:nowrap}'
@@ -48,7 +51,8 @@
       + '#tcrn-res .tr-puntos{display:none;justify-content:center;gap:8px;margin-top:18px}'
       + '#tcrn-res .tr-puntos i{width:7px;height:7px;border-radius:50%;background:#3a3a3a;transition:background .3s,width .3s}'
       + '#tcrn-res .tr-puntos i.on{background:#fff;width:20px;border-radius:4px}'
-      + '@media (max-width:860px){#tcrn-res{padding:44px 0 46px}#tcrn-res .tr-in{padding:0 16px}#tcrn-res .tr-card{flex-basis:84%}#tcrn-res .tr-puntos{display:flex}}';
+      + '@media (max-width:860px){#tcrn-res{padding:44px 0 46px}#tcrn-res .tr-in{padding:0 16px}#tcrn-res .tr-card{flex-basis:84%;grid-template-columns:1fr;grid-template-rows:auto 1fr;min-height:0}'
+      + '#tcrn-res .tr-img{height:auto;aspect-ratio:16/9;order:-1}#tcrn-res .tr-txt{padding:20px 20px 18px}#tcrn-res .tr-puntos{display:flex}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     // 1) estrellas debajo del título
@@ -63,10 +67,10 @@
     s.innerHTML = '<div class="tr-in"><div class="tr-cab"><h2>Los que ya la tienen</h2>'
       + '<div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div></div>'
       + '<div class="tr-track">' + RESENAS.map(function (r) {
-        return '<article class="tr-card"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div>'
+        return '<article class="tr-card"><div class="tr-txt"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div>'
           + '<span class="tr-comilla" aria-hidden="true">“</span><p>' + r.texto + '</p>'
-          + '<div class="tr-pie"><button type="button" class="tr-foto" data-foto="' + BASE + r.foto + '" aria-label="Ver la foto de ' + r.nombre + '" style="background-image:url(' + BASE + r.foto + ')"></button>'
-          + '<div class="tr-datos"><span class="tr-quien">' + r.nombre + ' · ' + r.ciudad + '</span><span class="tr-ver">✓ COMPRA VERIFICADA</span></div></div></article>';
+          + '<div class="tr-pie"><div class="tr-datos"><span class="tr-quien">' + r.nombre + ' · ' + r.ciudad + '</span><span class="tr-ver">✓ COMPRA VERIFICADA</span></div></div></div>'
+          + '<button type="button" class="tr-img tr-foto" data-foto="' + BASE + r.foto + '" aria-label="Ver la foto de ' + r.nombre + ' con su Greatness" style="background-image:url(' + BASE + r.foto + ')"></button></article>';
       }).join('') + '</div><div class="tr-puntos">' + RESENAS.map(function () { return '<i></i>'; }).join('') + '</div></div>';
     if (rel && rel.parentNode) rel.parentNode.insertBefore(s, rel);
     else (document.querySelector('footer') || document.body).insertAdjacentElement('beforebegin', s);
