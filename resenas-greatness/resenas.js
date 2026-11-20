@@ -34,14 +34,17 @@
       + '#tcrn-res .tr-nota b{font-size:16px;letter-spacing:2px;color:#fff}'
       + '#tcrn-res .tr-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}'
       + '#tcrn-res .tr-track::-webkit-scrollbar{display:none}'
-      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 28px) / 3);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}'
-      + '#tcrn-res .tr-foto{aspect-ratio:4/5;background:#1b1b1b center/cover no-repeat}'
-      + '#tcrn-res .tr-cuerpo{padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px;flex:1}'
-      + '#tcrn-res .tr-cuerpo .tr-st{font-size:15px;letter-spacing:2px;color:#fff;line-height:1}'
-      + '#tcrn-res .tr-cuerpo p{margin:0;font:400 15px/1.5 "Archivo",Arial,sans-serif;color:#e6e6e6}'
-      + '#tcrn-res .tr-pie{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px;border-top:1px solid #262626}'
-      + '#tcrn-res .tr-quien{font:600 9.5px/1 Unbounded,sans-serif;letter-spacing:.16em;color:#fff}'
-      + '#tcrn-res .tr-ver{font:600 8px/1 Unbounded,sans-serif;letter-spacing:.14em;color:#0A0A0A;background:#fff;padding:6px 8px;border-radius:3px;white-space:nowrap}'
+      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 28px) / 3);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;padding:26px 24px 22px;min-height:340px}'
+      + '#tcrn-res .tr-st{font-size:16px;letter-spacing:3px;color:#fff;line-height:1}'
+      + '#tcrn-res .tr-comilla{display:block;margin:18px 0 -14px;font:600 64px/.6 Unbounded,sans-serif;color:#3a3a3a;height:30px}'
+      + '#tcrn-res .tr-card p{margin:0 0 22px;font:600 clamp(19px,1.7vw,23px)/1.3 Unbounded,sans-serif;letter-spacing:-.01em;color:#fff;text-transform:none}'
+      + '#tcrn-res .tr-pie{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #262626}'
+      + '#tcrn-res .tr-foto{flex:0 0 auto;width:52px;height:52px;border-radius:8px;border:1px solid #333;background:#1b1b1b center/cover no-repeat;cursor:zoom-in;padding:0}'
+      + '#tcrn-res .tr-datos{display:flex;flex-direction:column;gap:7px;min-width:0}'
+      + '#tcrn-res .tr-quien{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.16em;color:#fff}'
+      + '#tcrn-res .tr-ver{align-self:flex-start;font:600 7.5px/1 Unbounded,sans-serif;letter-spacing:.14em;color:#0A0A0A;background:#fff;padding:5px 7px;border-radius:3px;white-space:nowrap}'
+      + '#tcrn-res-zoom{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}'
+      + '#tcrn-res-zoom.on{display:flex}#tcrn-res-zoom img{max-width:min(520px,100%);max-height:90vh;border-radius:10px}'
       + '#tcrn-res .tr-puntos{display:none;justify-content:center;gap:8px;margin-top:18px}'
       + '#tcrn-res .tr-puntos i{width:7px;height:7px;border-radius:50%;background:#3a3a3a;transition:background .3s,width .3s}'
       + '#tcrn-res .tr-puntos i.on{background:#fff;width:20px;border-radius:4px}'
@@ -60,12 +63,22 @@
     s.innerHTML = '<div class="tr-in"><div class="tr-cab"><h2>Los que ya la tienen</h2>'
       + '<div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div></div>'
       + '<div class="tr-track">' + RESENAS.map(function (r) {
-        return '<article class="tr-card"><div class="tr-foto" role="img" aria-label="Foto de ' + r.nombre + ' con su Greatness" style="background-image:url(' + BASE + r.foto + ')"></div>'
-          + '<div class="tr-cuerpo"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div><p>“' + r.texto + '”</p>'
-          + '<div class="tr-pie"><span class="tr-quien">' + r.nombre + ' · ' + r.ciudad + '</span><span class="tr-ver">✓ COMPRA VERIFICADA</span></div></div></article>';
+        return '<article class="tr-card"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div>'
+          + '<span class="tr-comilla" aria-hidden="true">“</span><p>' + r.texto + '</p>'
+          + '<div class="tr-pie"><button type="button" class="tr-foto" data-foto="' + BASE + r.foto + '" aria-label="Ver la foto de ' + r.nombre + '" style="background-image:url(' + BASE + r.foto + ')"></button>'
+          + '<div class="tr-datos"><span class="tr-quien">' + r.nombre + ' · ' + r.ciudad + '</span><span class="tr-ver">✓ COMPRA VERIFICADA</span></div></div></article>';
       }).join('') + '</div><div class="tr-puntos">' + RESENAS.map(function () { return '<i></i>'; }).join('') + '</div></div>';
     if (rel && rel.parentNode) rel.parentNode.insertBefore(s, rel);
     else (document.querySelector('footer') || document.body).insertAdjacentElement('beforebegin', s);
+
+    // tocar la foto chiquita la agranda
+    var zoom = document.createElement('div'); zoom.id = 'tcrn-res-zoom'; zoom.innerHTML = '<img alt="Foto del cliente con su Greatness">';
+    document.body.appendChild(zoom);
+    zoom.addEventListener('click', function () { zoom.classList.remove('on'); });
+    s.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('.tr-foto'); if (!b) return;
+      zoom.querySelector('img').src = b.getAttribute('data-foto'); zoom.classList.add('on'); pausaHasta = Date.now() + 15000;
+    });
 
     a.addEventListener('click', function (e) { e.preventDefault(); s.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
