@@ -98,7 +98,8 @@
     var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!quieto) setInterval(function () {
       if (!visible || Date.now() < pausaHasta || document.hidden || track.scrollWidth <= track.clientWidth + 4) return;
-      ir((actual() + 1) % cards.length);
+      var alFinal = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+      ir(alFinal ? 0 : (actual() + 1) % cards.length);
     }, 5000);
     marcar();
   }
