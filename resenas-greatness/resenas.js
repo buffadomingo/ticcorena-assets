@@ -49,9 +49,18 @@
       + '#tcrn-res-zoom{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}'
       + '#tcrn-res-zoom.on{display:flex}#tcrn-res-zoom img{max-width:min(520px,100%);max-height:90vh;border-radius:10px}'
       + '#tcrn-res .tr-der{display:flex;align-items:center;gap:18px}'
-      + '#tcrn-res .tr-flechas{display:none;gap:8px}#tcrn-res .tr-flechas.on{display:flex}'
-      + '#tcrn-res .tr-flechas button{width:40px;height:40px;border-radius:50%;border:1px solid #3a3a3a;background:transparent;color:#fff;font:16px/1 Arial,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,color .2s}'
-      + '#tcrn-res .tr-flechas button:hover{background:#fff;color:#0A0A0A;border-color:#fff}'
+      /* flechas a los costados: finas, aparecen suave; en el celu no (se desliza con el dedo + puntitos) */
+      + '#tcrn-res .tr-marco{position:relative}'
+      + '#tcrn-res .tr-fl{position:absolute;top:50%;z-index:3;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid rgba(255,255,255,.18);'
+      + 'background:rgba(20,20,20,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;'
+      + 'opacity:0;visibility:hidden;transform:scale(.92);transition:opacity .35s ease,transform .35s cubic-bezier(.2,.8,.2,1),background .25s,border-color .25s,color .25s,visibility 0s .35s}'
+      + '#tcrn-res .tr-fl svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.2,.8,.2,1)}'
+      + '#tcrn-res .tr-marco.hay .tr-fl{opacity:1;visibility:visible;transform:scale(1);transition-delay:0s}'
+      + '#tcrn-res .tr-fl:hover{background:#fff;color:#0A0A0A;border-color:#fff}'
+      + '#tcrn-res .tr-ant:hover svg{transform:translateX(-2px)}#tcrn-res .tr-sig:hover svg{transform:translateX(2px)}'
+      + '#tcrn-res .tr-fl:focus-visible{outline:2px solid #fff;outline-offset:3px}'
+      + '#tcrn-res .tr-ant{left:-66px}#tcrn-res .tr-sig{right:-66px}'
+      + '@media (max-width:1300px){#tcrn-res .tr-ant{left:-23px}#tcrn-res .tr-sig{right:-23px}}'
       + '#tcrn-res .tr-puntos{display:none;justify-content:center;gap:8px;margin-top:18px}'
       + '#tcrn-res .tr-puntos i{width:7px;height:7px;border-radius:50%;background:#3a3a3a;transition:background .3s,width .3s}'
       + '#tcrn-res .tr-puntos i.on{background:#fff;width:20px;border-radius:4px}'
@@ -69,14 +78,15 @@
     // 2) sección de reseñas
     var s = document.createElement('section'); s.id = 'tcrn-res';
     s.innerHTML = '<div class="tr-in"><div class="tr-cab"><h2>Los que ya la tienen</h2>'
-      + '<div class="tr-der"><div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div>'
-      + '<div class="tr-flechas"><button type="button" class="tr-ant" aria-label="Reseña anterior">←</button><button type="button" class="tr-sig" aria-label="Reseña siguiente">→</button></div></div></div>'
+      + '<div class="tr-der"><div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div></div></div>'
+      + '<div class="tr-marco"><button type="button" class="tr-fl tr-ant" aria-label="Reseña anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>'
+      + '<button type="button" class="tr-fl tr-sig" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>'
       + '<div class="tr-track">' + RESENAS.map(function (r) {
         return '<article class="tr-card"><div class="tr-txt"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div>'
           + '<span class="tr-comilla" aria-hidden="true">“</span><p>' + r.texto + '</p>'
           + '<div class="tr-pie"><div class="tr-datos"><span class="tr-quien">' + r.nombre + ' · ' + r.ciudad + '</span><span class="tr-ver">✓ COMPRA VERIFICADA</span></div></div></div>'
           + '<button type="button" class="tr-img tr-foto" data-foto="' + BASE + r.foto + '" aria-label="Ver la foto de ' + r.nombre + ' con su Greatness" style="background-image:url(' + BASE + r.foto + ')"></button></article>';
-      }).join('') + '</div><div class="tr-puntos">' + RESENAS.map(function () { return '<i></i>'; }).join('') + '</div></div>';
+      }).join('') + '</div></div><div class="tr-puntos">' + RESENAS.map(function () { return '<i></i>'; }).join('') + '</div></div>';
     if (rel && rel.parentNode) rel.parentNode.insertBefore(s, rel);
     else (document.querySelector('footer') || document.body).insertAdjacentElement('beforebegin', s);
 
@@ -107,8 +117,8 @@
       ir(alFinal ? 0 : (actual() + 1) % cards.length);
     }, 5000);
     // flechas: solo aparecen cuando hay más reseñas de las que entran en pantalla
-    var flechas = s.querySelector('.tr-flechas');
-    function hayMas() { flechas.classList.toggle('on', track.scrollWidth > track.clientWidth + 4); }
+    var marco = s.querySelector('.tr-marco');
+    function hayMas() { marco.classList.toggle('hay', window.innerWidth > 860 && track.scrollWidth > track.clientWidth + 4); }
     function mover(d) {
       pausaHasta = Date.now() + 10000;
       var max = track.scrollWidth - track.clientWidth - 4, k = actual() + d;
