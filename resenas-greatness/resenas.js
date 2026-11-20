@@ -35,13 +35,13 @@
       + '#tcrn-res .tr-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}'
       + '#tcrn-res .tr-track::-webkit-scrollbar{display:none}'
       /* tarjeta: 65 % lo que dice · 35 % la foto (al costado en PC, arriba en el celu) */
-      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 14px) / 2);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:grid;grid-template-columns:65fr 35fr;min-height:360px}'
-      + '#tcrn-res .tr-txt{display:flex;flex-direction:column;padding:26px 24px 22px;min-width:0}'
+      + '#tcrn-res .tr-card{flex:0 0 calc((100% - 28px) / 3);scroll-snap-align:start;background:#141414;border:1px solid #262626;border-radius:10px;overflow:hidden;display:grid;grid-template-columns:65fr 35fr;min-height:360px}'
+      + '#tcrn-res .tr-txt{display:flex;flex-direction:column;padding:22px 18px 18px;min-width:0}'
       + '#tcrn-res .tr-img{display:block;width:100%;height:100%;border:0;padding:0;margin:0;background:#1b1b1b center/cover no-repeat;cursor:zoom-in;position:relative}'
       + '#tcrn-res .tr-img:after{content:"⤢";position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font:14px/26px Arial,sans-serif;text-align:center}'
       + '#tcrn-res .tr-st{font-size:16px;letter-spacing:3px;color:#fff;line-height:1}'
       + '#tcrn-res .tr-comilla{display:block;margin:18px 0 -14px;font:600 64px/.6 Unbounded,sans-serif;color:#3a3a3a;height:30px}'
-      + '#tcrn-res .tr-card p{margin:0 0 22px;font:600 clamp(19px,1.7vw,23px)/1.3 Unbounded,sans-serif;letter-spacing:-.01em;color:#fff;text-transform:none}'
+      + '#tcrn-res .tr-card p{margin:0 0 22px;font:600 clamp(16px,1.35vw,19px)/1.32 Unbounded,sans-serif;letter-spacing:-.01em;color:#fff;text-transform:none}'
       + '#tcrn-res .tr-pie{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #262626}'
       + '#tcrn-res .tr-datos{display:flex;flex-direction:column;gap:7px;min-width:0}'
       + '#tcrn-res .tr-quien{font:600 10px/1 Unbounded,sans-serif;letter-spacing:.16em;color:#fff}'
@@ -52,7 +52,7 @@
       + '#tcrn-res .tr-puntos i{width:7px;height:7px;border-radius:50%;background:#3a3a3a;transition:background .3s,width .3s}'
       + '#tcrn-res .tr-puntos i.on{background:#fff;width:20px;border-radius:4px}'
       + '@media (max-width:860px){#tcrn-res{padding:44px 0 46px}#tcrn-res .tr-in{padding:0 16px}#tcrn-res .tr-card{flex-basis:84%;grid-template-columns:1fr;grid-template-rows:auto 1fr;min-height:0}'
-      + '#tcrn-res .tr-img{height:auto;aspect-ratio:16/9;order:-1}#tcrn-res .tr-txt{padding:20px 20px 18px}#tcrn-res .tr-puntos{display:flex}}';
+      + '#tcrn-res .tr-img{height:auto;aspect-ratio:16/9;order:-1}#tcrn-res .tr-txt{padding:20px 20px 18px}#tcrn-res .tr-card p{font-size:19px}#tcrn-res .tr-puntos{display:flex}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     // 1) estrellas debajo del título
