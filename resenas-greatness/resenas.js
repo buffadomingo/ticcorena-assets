@@ -48,6 +48,10 @@
       + '#tcrn-res .tr-ver{align-self:flex-start;font:600 7.5px/1 Unbounded,sans-serif;letter-spacing:.14em;color:#0A0A0A;background:#fff;padding:5px 7px;border-radius:3px;white-space:nowrap}'
       + '#tcrn-res-zoom{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}'
       + '#tcrn-res-zoom.on{display:flex}#tcrn-res-zoom img{max-width:min(520px,100%);max-height:90vh;border-radius:10px}'
+      + '#tcrn-res .tr-der{display:flex;align-items:center;gap:18px}'
+      + '#tcrn-res .tr-flechas{display:none;gap:8px}#tcrn-res .tr-flechas.on{display:flex}'
+      + '#tcrn-res .tr-flechas button{width:40px;height:40px;border-radius:50%;border:1px solid #3a3a3a;background:transparent;color:#fff;font:16px/1 Arial,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,color .2s}'
+      + '#tcrn-res .tr-flechas button:hover{background:#fff;color:#0A0A0A;border-color:#fff}'
       + '#tcrn-res .tr-puntos{display:none;justify-content:center;gap:8px;margin-top:18px}'
       + '#tcrn-res .tr-puntos i{width:7px;height:7px;border-radius:50%;background:#3a3a3a;transition:background .3s,width .3s}'
       + '#tcrn-res .tr-puntos i.on{background:#fff;width:20px;border-radius:4px}'
@@ -65,7 +69,8 @@
     // 2) sección de reseñas
     var s = document.createElement('section'); s.id = 'tcrn-res';
     s.innerHTML = '<div class="tr-in"><div class="tr-cab"><h2>Los que ya la tienen</h2>'
-      + '<div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div></div>'
+      + '<div class="tr-der"><div class="tr-nota"><b>' + est(prom) + '</b>' + prom.toFixed(1).replace('.', ',') + ' · ' + N + ' RESEÑAS</div>'
+      + '<div class="tr-flechas"><button type="button" class="tr-ant" aria-label="Reseña anterior">←</button><button type="button" class="tr-sig" aria-label="Reseña siguiente">→</button></div></div></div>'
       + '<div class="tr-track">' + RESENAS.map(function (r) {
         return '<article class="tr-card"><div class="tr-txt"><div class="tr-st" aria-label="' + r.estrellas + ' de 5 estrellas">' + est(r.estrellas) + '</div>'
           + '<span class="tr-comilla" aria-hidden="true">“</span><p>' + r.texto + '</p>'
@@ -101,6 +106,19 @@
       var alFinal = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
       ir(alFinal ? 0 : (actual() + 1) % cards.length);
     }, 5000);
+    // flechas: solo aparecen cuando hay más reseñas de las que entran en pantalla
+    var flechas = s.querySelector('.tr-flechas');
+    function hayMas() { flechas.classList.toggle('on', track.scrollWidth > track.clientWidth + 4); }
+    function mover(d) {
+      pausaHasta = Date.now() + 10000;
+      var max = track.scrollWidth - track.clientWidth - 4, k = actual() + d;
+      if (d > 0 && track.scrollLeft >= max) k = 0;
+      if (k < 0) k = cards.length - 1;
+      ir(k);
+    }
+    s.querySelector('.tr-ant').addEventListener('click', function () { mover(-1); });
+    s.querySelector('.tr-sig').addEventListener('click', function () { mover(1); });
+    hayMas(); window.addEventListener('resize', hayMas);
     marcar();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
